@@ -24,11 +24,11 @@ new class extends Component {
             'description' => $this->description,
         ]);
 
-        $this->redirect(route('dashboard'));
+        $this->redirect('/');
     }
 }; ?>
 
-<x-layouts.app>
+<x-layouts.board>
     @volt('pages.posts.create')
         <form wire:submit="create" class="space-y-6">
             <flux:input wire:model="title" label="Title" />
@@ -36,4 +36,4 @@ new class extends Component {
             <flux:button type="submit" variant="primary">Create</flux:button>
         </form>
     @endvolt
-</x-layouts.app>
+</x-layouts.board>
