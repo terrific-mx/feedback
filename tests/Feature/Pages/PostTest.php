@@ -18,7 +18,7 @@ describe('create', function () {
     it('can create a post', function () {
         $user = User::factory()->create();
 
-        $component = Volt::actingAs($user)->test('pages.posts.create')
+        Volt::actingAs($user)->test('pages.posts.create')
             ->set('title', 'Test title')
             ->set('description', 'Test description')
             ->call('create');
