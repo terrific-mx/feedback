@@ -117,7 +117,7 @@ class DatabaseSeeder extends Seeder
 
                     return [
                         'description' => $comments[$sequence->index % count($comments)],
-                        'user_id' => $users->random()->id,
+                        'user_id' => $users->where('id', '!=', $post->user_id)->random()->id,
                         'created_at' => $post->created_at->addHours(rand(1, 168))
                     ];
                 })
