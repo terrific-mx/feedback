@@ -2,6 +2,12 @@
 
 A Laravel-based feedback management system that allows users to submit, track, and manage product/service improvement ideas.
 
-**Note:** This project is currently under active development.
+Current features:
+- User feedback post creation
+- Listing all received feedback
+- Commenting on feedback submissions
 
-Features include submission forms, categorization, voting, and admin moderation tools to help prioritize development efforts.
+Planned features:
+- Feedback categorization
+- Voting system
+- Admin moderation tools
