@@ -15,20 +15,20 @@ class DatabaseSeeder extends Seeder
     {
         $users = [
             [
-                'name' => 'Feedback Admin',
-                'email' => 'admin@feedback.com'
+                'name' => 'Alex Johnson',
+                'email' => 'alex.johnson@feedback.com'
             ],
             [
-                'name' => 'Product Manager',
-                'email' => 'pm@feedback.com'
+                'name' => 'Maria Garcia',
+                'email' => 'maria.garcia@feedback.com'
             ],
             [
-                'name' => 'Developer Lead',
-                'email' => 'dev@feedback.com'
+                'name' => 'James Wilson',
+                'email' => 'james.wilson@feedback.com'
             ],
             [
-                'name' => 'UX Designer',
-                'email' => 'ux@feedback.com'
+                'name' => 'Sarah Lee',
+                'email' => 'sarah.lee@feedback.com'
             ]
         ];
 
