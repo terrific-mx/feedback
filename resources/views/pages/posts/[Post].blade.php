@@ -3,12 +3,15 @@
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public Post $post;
-    public string $description = '';
     public ?Collection $comments = null;
+
+    #[Validate('required|string')]
+    public string $description = '';
 
     public function mount()
     {
@@ -19,9 +22,7 @@ new class extends Component {
     {
         $this->authorize('addComment', $this->post);
 
-        $this->validate([
-            'description' => 'required|string',
-        ]);
+        $this->validate();
 
         $this->post->comments()->create([
             'description' => $this->description,

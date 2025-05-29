@@ -81,7 +81,7 @@ describe('show', function () {
             ->set('description', 'Test comment')
             ->call('comment');
 
-        expect($post->comments->first())
+        expect($post->fresh()->comments->first())
             ->description->toBe('Test comment')
             ->user_id->toBe($user->id);
     });
