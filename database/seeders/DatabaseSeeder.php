@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
             )
             ->create();
 
-        Post::factory()
+        $posts = Post::factory()
             ->count(7)
             ->sequence(
                 [
@@ -70,53 +70,58 @@ class DatabaseSeeder extends Seeder
                     'created_at' => now()->subDays(28)
                 ],
             )
-            ->has(
-                Comment::factory()
-                    ->count(3)
-                    ->state(function (array $attributes, Post $post) use ($users) {
-                        return [
-                            'user_id' => $users->random()->id,
-                            'created_at' => $post->created_at->addHours(rand(1, 168)),
-                            'description' => match($post->title) {
-                                'Dark Mode Request' => [
-                                    'This would help with late-night work sessions!',
-                                    'Could we get a toggle in the user settings?',
-                                    'Blue light filtering would be a nice addition.'
-                                ][rand(0, 2)],
-                                'Mobile App Performance' => [
-                                    'I experience++ second load times regularly,',
-                                    'The web version works much better.',
-                                    'The issue seems worse on Android.'
-                                ][rand(0, 2)],
-                                'Search Functionality' => [
-                                    'The current search only looks at titles, not content.',
-                                    'Filters by date would be helpful too.',
-                                    'Search history/saved searches would help.'
-                                ][rand(0, 2)],
-                                'Notification Settings' => [
-                                    'Getting too many emails for minor updates.',
-                                    'I only want notifications for my posts.',
-                                    'Push notifications would be better than email.'
-                                ][rand(0, 2)],
-                                'Export Feedback Data' => [
-                                    'Needed for our monthly stakeholder reports.',
-                                    'CSV format would be most useful.',
-                                    'Include comment threads in the export.'
-                                ][rand(0, 2)],
-                                'User Profile Improvements' => [
-                                    'Would help identify subject matter experts.',
-                                    'Add badges for top contributors.',
-                                    'Activity timeline would be useful.'
-                                ][rand(0, 2)],
-                                'Keyboard Shortcuts' => [
-                                    'Power users would really appreciate this.',
-                                    'Should include shortcuts for navigation.',
-                                    'Can we see a list of proposed shortcuts?'
-                                ][rand(0, 2)]
-                            }
-                        ];
-                    })
-            )
             ->create();
+
+        foreach ($posts as $post) {
+            Comment::factory()
+                ->count(3)
+                ->sequence(function ($sequence) use ($post, $users) {
+                    $comments = match($post->title) {
+                        'Dark Mode Request' => [
+                            'This would help with late-night work sessions!',
+                            'Could we get a toggle in the user settings?',
+                            'Blue light filtering would be a nice addition.'
+                        ],
+                        'Mobile App Performance' => [
+                            'I experience 2+ second load times regularly.',
+                            'The web version works much better.',
+                            'The issue seems worse on Android.'
+                        ],
+                        'Search Functionality' => [
+                            'The current search only looks at titles, not content.',
+                            'Filters by date would be helpful too.',
+                            'Search history/saved searches would help.'
+                        ],
+                        'Notification Settings' => [
+                            'Getting too many emails for minor updates.',
+                            'I only want notifications for my posts.',
+                            'Push notifications would be better than email.'
+                        ],
+                        'Export Feedback Data' => [
+                            'Needed for our monthly stakeholder reports.',
+                            'CSV format would be most useful.',
+                            'Include comment threads in the export.'
+                        ],
+                        'User Profile Improvements' => [
+                            'Would help identify subject matter experts.',
+                            'Add badges for top contributors.',
+                            'Activity timeline would be useful.'
+                        ],
+                        'Keyboard Shortcuts' => [
+                            'Power users would really appreciate this.',
+                            'Should include shortcuts for navigation.',
+                            'Can we see a list of proposed shortcuts?'
+                        ],
+                        default => ['Great suggestion!']
+                    };
+
+                    return [
+                        'description' => $comments[$sequence->index % count($comments)],
+                        'user_id' => $users->random()->id,
+                        'created_at' => $post->created_at->addHours(rand(1, 168))
+                    ];
+                })
+                ->create(['post_id' => $post->id]);
+        }
     }
 }
