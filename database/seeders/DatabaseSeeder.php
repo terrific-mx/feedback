@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
             ->create();
 
         $posts = Post::factory()
+            ->pending()
             ->count(7)
             ->sequence(
                 [

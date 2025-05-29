@@ -21,6 +21,17 @@ class PostFactory extends Factory
             'user_id' => User::factory(),
             'title' => 'Sample Feedback Title',
             'description' => 'This is a sample feedback description',
+            'status' => 'pending',
         ];
+    }
+
+    /**
+     * Indicate that the post is pending.
+     */
+    public function pending(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'status' => 'pending',
+        ]);
     }
 }
