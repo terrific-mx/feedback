@@ -53,13 +53,8 @@ class DatabaseSeeder extends Seeder
                 Comment::factory()
                     ->count(3)
                     ->state(function (array $attributes, Post $post) use ($users) {
-                        // Use post author for first comment, then random users
-                        $commenter = $attributes['sequence'] === 0 
-                            ? $post->user_id 
-                            : $users->random()->id;
-
                         return [
-                            'user_id' => $commenter,
+                            'user_id' => $users->random()->id,
                             'description' => match($post->title) {
                                 'Dark Mode Request' => [
                                     'This would help with late-night work sessions!',
