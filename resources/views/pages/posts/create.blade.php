@@ -40,9 +40,11 @@ new class extends Component {
             </div>
             <div class="min-h-4 sm:min-h-10"></div>
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
-                <flux:input wire:model="title" label="Title" />
-                <flux:textarea wire:model="description" label="Description" />
-                <flux:button type="submit" variant="primary">Create</flux:button>
+                <flux:input wire:model="title" :label="__('Title')" required />
+                <flux:textarea wire:model="description" :label="__('Description')" required />
+                <div class="flex justify-end">
+                    <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
+                </div>
             </form>
         </div>
     @endvolt
