@@ -9,7 +9,7 @@ new class extends Component {
 
     public function mount()
     {
-        $this->posts = Post::all();
+        $this->posts = Post::latest()->get();
     }
 }; ?>
 
