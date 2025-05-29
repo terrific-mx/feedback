@@ -1,12 +1,19 @@
 <?php
 
 use App\Models\Post;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public Post $post;
     public string $description = '';
+    public ?Collection $comments = null;
+
+    public function mount()
+    {
+        $this->comments = $this->post->comments;
+    }
 
     public function comment(): void
     {
@@ -62,6 +69,22 @@ new class extends Component {
                         </div>
                     </form>
                 </div>
+                <div class="min-h-4 sm:min-h-2"></div>
+                @foreach ($post->comments as $comment)
+                    <div class="p-3 sm:p-4 rounded-lg:bg:bg-zinc-50 dark:hover:bg-zinc-700/50">
+                        <flux:text variant="strong">{{ $comment->description }}</flux:text>
+                        <div class="min-h-2 sm:min-h-4"></div>
+                        <div class="flex flex-row sm:items-center gap-2">
+                            <flux:avatar :src="$comment->user->avatar" size="xs" class="shrink-0" />
+                            <div class="flex flex-col gap-0.5 sm:gap-2 sm:flex-row sm:items-center">
+                                <div class="flex items-center gap-2">
+                                    <flux:heading>{{ $comment->user->name }}</flux:heading>
+                                </div>
+                                <flux:text class="text-sm">{{ $comment->created_at->diffForHumans() }}</flux:text>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
         </div>
     @endvolt
