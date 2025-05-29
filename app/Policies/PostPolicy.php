@@ -63,4 +63,9 @@ class PostPolicy
     {
         return false;
     }
+
+    public function addComment(User $user, Post $post): bool
+    {
+        return true;
+    }
 }

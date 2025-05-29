@@ -10,6 +10,8 @@ new class extends Component {
 
     public function comment(): void
     {
+        $this->authorize('addComment', $this->post);
+
         $this->validate([
             'description' => 'required|string',
         ]);

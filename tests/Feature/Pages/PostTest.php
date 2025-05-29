@@ -85,4 +85,13 @@ describe('show', function () {
             ->description->toBe('Test comment')
             ->user_id->toBe($user->id);
     });
+
+    it('requires authentication to create comments', function () {
+        $post = Post::factory()->create();
+
+        Volt::test('pages.posts.show', ['post' => $post])
+            ->set('description', 'Test comment')
+            ->call('comment')
+            ->assertForbidden();
+    });
 });
