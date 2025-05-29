@@ -38,6 +38,7 @@ class DatabaseSeeder extends Seeder
             ->state(function (array $attributes) use ($users) {
                 return [
                     'user_id' => $users->random()->id,
+                    'created_at' => now()->subDays(rand(1, 30)),
                     'description' => match($attributes['title']) {
                         'Dark Mode Request' => 'Please add a dark mode option to reduce eye strain',
                         'Mobile App Performance' => 'The mobile app is slow when loading large feedback threads',
@@ -55,6 +56,7 @@ class DatabaseSeeder extends Seeder
                     ->state(function (array $attributes, Post $post) use ($users) {
                         return [
                             'user_id' => $users->random()->id,
+                            'created_at' => $post->created_at->addHours(rand(1, 168)), // Within 7 days
                             'description' => match($post->title) {
                                 'Dark Mode Request' => [
                                     'This would help with late-night work sessions!',
