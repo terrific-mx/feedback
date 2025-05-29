@@ -28,7 +28,7 @@ new class extends Component {
             <div class="min-h-4 sm:min-h-10"></div>
             <div id="posts" class="mx-auto max-w-lg max-sm:px-2">
                 @foreach ($posts as $post)
-                    <div class="p-3 sm:p-4 rounded-lg">
+                    <div class="p-3 sm:p-4 rounded-lg relative hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
                         <div>
                             <flux:heading size="lg" variant="strong">{{ $post->title }}</flux:heading>
                             <div class="min-h-2"></div>
@@ -43,6 +43,7 @@ new class extends Component {
                                 </div>
                                 <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
                             </div>
+                            <a href="/posts/{{ $post->id }}" class="absolute inset-0"></a>
                         </div>
                     </div>
                 @endforeach
