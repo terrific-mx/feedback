@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Post;
+use App\Models\Comment;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -13,112 +14,86 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [
-            [
-                'name' => 'Alex Johnson',
-                'email' => 'alex.johnson@feedback.com'
-            ],
-            [
-                'name' => 'Maria Garcia',
-                'email' => 'maria.garcia@feedback.com'
-            ],
-            [
-                'name' => 'James Wilson',
-                'email' => 'james.wilson@feedback.com'
-            ],
-            [
-                'name' => 'Sarah Lee',
-                'email' => 'sarah.lee@feedback.com'
-            ]
-        ];
+        $users = User::factory()
+            ->count(4)
+            ->sequence(
+                ['name' => 'Alex Johnson', 'email' => 'alex.johnson@feedback.com'],
+                ['name' => 'Maria Garcia', 'email' => 'maria.garcia@feedback.com'],
+                ['name' => 'James Wilson', 'email' => 'james.wilson@feedback.com'],
+                ['name' => 'Sarah Lee', 'email' => 'sarah.lee@feedback.com']
+            )
+            ->create();
 
-        foreach ($users as $userData) {
-            $user = User::factory()->create($userData);
-
-            // Only create posts/comments for admin user
-            if ($userData['email'] === 'admin@feedback.com') {
-                $posts = [
-                    [
-                        'title' => 'Dark Mode Request',
-                        'description' => 'Please add a dark mode option to reduce eye strain'
-                    ],
-                    [
-                        'title' => 'Mobile App Performance',
-                        'description' => 'The mobile app is slow when loading large feedback threads'
-                    ],
-                    [
-                        'title' => 'Search Functionality',
-                        'description' => 'We need better search capabilities to find old feedback'
-                    ],
-                    [
-                        'title' => 'Notification Settings',
-                        'description' => 'Allow users to customize notification preferences'
-                    ],
-                    [
-                        'title' => 'Export Feedback Data',
-                        'description' => 'Add option to export feedback as CSV/PDF'
-                    ],
-                    [
-                        'title' => 'User Profile Improvements',
-                        'description' => 'Profile pages need more detailed information'
-                    ],
-                    [
-                        'title' => 'Keyboard Shortcuts',
-                        'description' => 'Add keyboard shortcuts for common actions'
-                    ]
-                ];
-
-                foreach ($posts as $postData) {
-                    $post = \App\Models\Post::factory()->create([
-                        'user_id' => $user->id,
-                        'title' => $postData['title'],
-                        'description' => $postData['description'],
-                    ]);
-
-                    $comments = [
-                        [
-                            'description' => match($postData['title']) {
-                                'Dark Mode Request' => 'This would help with late-night work sessions!',
-                                'Mobile App Performance' => 'I experience++ second load times regularly',
-                                'Search Functionality' => 'The current search only looks at titles, not content',
-                                'Notification Settings' => 'Getting too many emails for minor updates',
-                                'Export Feedback Data' => 'Needed for our monthly stakeholder reports',
-                                'User Profile Improvements' => 'Would help identify subject matter experts',
-                                'Keyboard Shortcuts' => 'Power users would really appreciate this'
-                            }
-                        ],
-                        [
-                            'description' => match($postData['title']) {
-                                'Dark Mode Request' => 'Could we get a toggle in the user settings?',
-                                'Mobile App Performance' => 'The web version works much better',
-                                'Search Functionality' => 'Filters by date would be helpful too',
-                                'Notification Settings' => 'I only want notifications for my posts',
-                                'Export Feedback Data' => 'CSV format would be most useful',
-                                'User Profile Improvements' => 'Add badges for top contributors',
-                                'Keyboard Shortcuts' => 'Should include shortcuts for navigation'
-                            }
-                        ],
-                        [
-                            'description' => match($postData['title']) {
-                                'Dark Mode Request' => 'Blue light filtering would be a nice addition',
-                                'Mobile App Performance' => 'The issue seems worse on Android',
-                                'Search Functionality' => 'Search history/saved searches would help',
-                                'Notification Settings' => 'Push notifications would be better than email',
-                                'Export Feedback Data' => 'Include comment threads in the export',
-                                'User Profile Improvements' => 'Activity timeline would be useful',
-                                'Keyboard Shortcuts' => 'Can we see a list of proposed shortcuts?'
-                            }
-                        ]
-                    ];
-
-                    foreach ($comments as $commentData) {
-                        \App\Models\Comment::factory()->create([
-                            'post_id' => $post->id,
-                            'description' => $commentData['description'],
-                        ]);
+        Post::factory()
+            ->count(7)
+            ->sequence(
+                ['title' => 'Dark Mode Request'],
+                ['title' => 'Mobile App Performance'],
+                ['title' => 'Search Functionality'],
+                ['title' => 'Notification Settings'],
+                ['title' => 'Export Feedback Data'],
+                ['title' => 'User Profile Improvements'],
+                ['title' => 'Keyboard Shortcuts']
+            )
+            ->state(function (array $attributes) use ($users) {
+                return [
+                    'user_id' => $users->random()->id,
+                    'description' => match($attributes['title']) {
+                        'Dark Mode Request' => 'Please add a dark mode option to reduce eye strain',
+                        'Mobile App Performance' => 'The mobile app is slow when loading large feedback threads',
+                        'Search Functionality' => 'We need better search capabilities to find old feedback',
+                        'Notification Settings' => 'Allow users to customize notification preferences',
+                        'Export Feedback Data' => 'Add option to export feedback as CSV/PDF',
+                        'User Profile Improvements' => 'Profile pages need more detailed information',
+                        'Keyboard Shortcuts' => 'Add keyboard shortcuts for common actions'
                     }
-                }
-            }
-        }
+                ];
+            })
+            ->has(
+                Comment::factory()
+                    ->count(3)
+                    ->state(function (array $attributes, Post $post) {
+                        return [
+                            'description' => match($post->title) {
+                                'Dark Mode Request' => [
+                                    'This would help with late-night work sessions!',
+                                    'Could we get a toggle in the user settings?',
+                                    'Blue light filtering would be a nice addition'
+                                ][rand(0, 2)],
+                                'Mobile App Performance' => [
+                                    'I experience++ second load times regularly',
+                                    'The web version works much better',
+                                    'The issue seems worse on Android'
+                                ][rand(0, 2)],
+                                'Search Functionality' => [
+                                    'The current search only looks at titles, not content',
+                                    'Filters by date would be helpful too',
+                                    'Search history/saved searches would help'
+                                ][rand(0, 2)],
+                                'Notification Settings' => [
+                                    'Getting too many emails for minor updates',
+                                    'I only want notifications for my posts',
+                                    'Push notifications would be better than email'
+                                ][rand(0, 2)],
+                                'Export Feedback Data' => [
+                                    'Needed for our monthly stakeholder reports',
+                                    'CSV format would be most useful',
+                                    'Include comment threads in the export'
+                                ][rand(0, 2)],
+                                'User Profile Improvements' => [
+                                    'Would help identify subject matter experts',
+                                    'Add badges for top contributors',
+                                    'Activity timeline would be useful'
+                                ][rand(0, 2)],
+                                'Keyboard Shortcuts' => [
+                                    'Power users would really appreciate this',
+                                    'Should include shortcuts for navigation',
+                                    'Can we see a list of proposed shortcuts?'
+                                ][rand(0, 2)]
+                            }
+                        ];
+                    })
+            )
+            ->create();
     }
 }
