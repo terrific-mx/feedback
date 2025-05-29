@@ -9,6 +9,21 @@ use function Pest\Laravel\get;
 
 uses(RefreshDatabase::class);
 
+describe('index', function () {
+    it('loads successfully', function () {
+        get('/')
+            ->assertOk();
+    });
+
+    it('shows posts when they exist', function () {
+        $post = Post::factory()->create();
+
+        get('/')
+            ->assertSee($post->title)
+            ->assertSee($post->description);
+    });
+});
+
 describe('create', function () {
     it('redirects unauthenticated users', function () {
         get('/posts/create')
