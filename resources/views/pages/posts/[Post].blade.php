@@ -35,6 +35,11 @@ new class extends Component {
                             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
                         </div>
                     </div>
+                    <div class="min-h-2 sm:min-h-4"></div>
+                    <flux:textarea :placeholder="__('Add a comment...')" rows="3" />
+                    <div class="flex justify-end">
+                        <flux:button variant="primary" size="sm" class="mt-2">{{ __('Comment') }}</flux:button>
+                    </div>
                 </div>
             </div>
         </div>
