@@ -27,4 +27,32 @@ describe('create', function () {
             ->description->toBe('Test description')
             ->user_id->toBe($user->id);
     });
+
+    it('requires title', function () {
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('description', 'Test description')
+            ->call('create')
+            ->assertHasErrors(['title' => 'required']);
+    });
+
+    it('requires description', function () {
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('title', 'Test title')
+            ->call('create')
+            ->assertHasErrors(['description' => 'required']);
+    });
+
+    it('validates title max length', function () {
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('title', str_repeat('a', 256))
+            ->set('description', 'Test description')
+            ->call('create')
+            ->assertHasErrors(['title' => 'max']);
+    });
 });
