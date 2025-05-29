@@ -71,3 +71,18 @@ describe('create', function () {
             ->assertHasErrors(['title' => 'max']);
     });
 });
+
+describe('show', function () {
+    it('can create comments', function () {
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
+            ->set('description', 'Test comment')
+            ->call('comment');
+
+        expect($post->comments->first())
+            ->description->toBe('Test comment')
+            ->user_id->toBe($user->id);
+    });
+});

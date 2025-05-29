@@ -1,10 +1,27 @@
 <?php
 
 use App\Models\Post;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public Post $post;
+    public string $description = '';
+
+    public function comment(): void
+    {
+        $this->validate([
+            'description' => 'required|string',
+        ]);
+
+        $this->post->comments()->create([
+            'description' => $this->description,
+            'user_id' => Auth::id(),
+        ]);
+
+        $this->reset('description');
+        $this->post->refresh();
+    }
 }; ?>
 
 <x-layouts.board>
@@ -36,10 +53,12 @@ new class extends Component {
                         </div>
                     </div>
                     <div class="min-h-2 sm:min-h-4"></div>
-                    <flux:textarea :placeholder="__('Add a comment...')" rows="3" />
-                    <div class="flex justify-end">
-                        <flux:button variant="primary" size="sm" class="mt-2">{{ __('Comment') }}</flux:button>
-                    </div>
+                    <form wire:submit="comment">
+                        <flux:textarea wire:model="description" :placeholder="__('Add a comment...')" rows="3" />
+                        <div class="flex justify-end">
+                            <flux:button type="submit" variant="primary" size="sm" class="mt-2">{{ __('Comment') }}</flux:button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
