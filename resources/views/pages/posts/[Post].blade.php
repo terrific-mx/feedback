@@ -15,7 +15,7 @@ new class extends Component {
 
     public function mount()
     {
-        $this->comments = $this->post->comments;
+        $this->comments = $this->post->comments()->oldest()->get();
     }
 
     public function comment(): void
@@ -71,7 +71,7 @@ new class extends Component {
                     </form>
                 </div>
                 <div class="min-h-4 sm:min-h-2"></div>
-                @foreach ($post->comments as $comment)
+                @foreach ($comments as $comment)
                     <div class="p-3 sm:p-4 rounded-lg:bg:bg-zinc-50 dark:hover:bg-zinc-700/50">
                         <flux:text variant="strong">{{ $comment->description }}</flux:text>
                         <div class="min-h-2 sm:min-h-4"></div>
