@@ -94,4 +94,34 @@ describe('show', function () {
             ->call('comment')
             ->assertForbidden();
     });
+
+    it('can change the status of a post', function () {
+        $post = Post::factory()->pending()->create();
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('status', 'completed')
+            ->call('changeStatus');
+
+        expect($post->fresh())->status->toBe('completed');
+    });
+
+    it('requires authentication to change the status', function () {
+        $post = Post::factory()->create(['status' => 'pending']);
+
+        Volt::test('pages.posts.show', ['post' => $post])
+            ->set('status', 'completed')
+            ->call('changeStatus')
+            ->assertForbidden();
+    });
+
+    it('validates the status is either pending or completed', function () {
+        $post = Post::factory()->create(['status' => 'pending']);
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('status', 'invalid-status')
+            ->call('changeStatus')
+            ->assertHasErrors(['status' => 'in']);
+    });
 });

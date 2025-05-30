@@ -50,7 +50,7 @@ new class extends Component {
                                     <flux:heading>{{ $post->user->name }}</flux:heading>
                                 </div>
                                 <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
-                                <flux:badge size="sm" color="yellow">{{ $post->formatted_status }}</flux:badge>
+                                <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
                             </div>
                             <a href="/posts/{{ $post->id }}" class="absolute inset-0"></a>
                         </div>

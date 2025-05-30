@@ -26,7 +26,19 @@ class Post extends Model
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => match ($attributes['status']) {
                 'pending' => __('Pending'),
+                'completed' => __('Completed'),
                 default => __(ucfirst($attributes['status'])),
+            },
+        );
+    }
+
+    protected function statusColor(): Attribute
+    {
+        return Attribute::make(
+            get: fn (mixed $value, array $attributes) => match ($attributes['status']) {
+                'pending' => 'yellow',
+                'completed' => 'green',
+                default => 'zinc',
             },
         );
     }

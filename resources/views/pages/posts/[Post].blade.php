@@ -10,19 +10,22 @@ new class extends Component {
     public Post $post;
     public ?Collection $comments = null;
 
-    #[Validate('required|string')]
     public string $description = '';
+    public string $status;
 
     public function mount()
     {
         $this->comments = $this->post->comments()->oldest()->get();
+        $this->satus = $this->post->status;
     }
 
     public function comment(): void
     {
         $this->authorize('addComment', $this->post);
 
-        $this->validate();
+        $this->validate([
+            'description' => 'required|string',
+        ]);
 
         $this->post->comments()->create([
             'description' => $this->description,
@@ -32,6 +35,19 @@ new class extends Component {
         $this->reset('description');
 
         $this->comments = $this->post->comments()->oldest()->get();
+    }
+
+    public function changeStatus()
+    {
+        $this->authorize('updateStatus', $this->post);
+
+        $this->validate([
+            'status' => 'required|in:pending,completed',
+        ]);
+
+        $this->post->update(['status' => $this->status]);
+
+        $this->post->refresh();
     }
 }; ?>
 
@@ -61,6 +77,22 @@ new class extends Component {
                                 <flux:heading>{{ $post->user->name }}</flux:heading>
                             </div>
                             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
+                            @can('updateStatus', $post)
+                            <flux:dropdown>
+                                <flux:badge as="button" variant="pill" :color="$post->status_color" icon:trailing="chevron-down" size="sm">
+                                    {{ $post->formatted_status }}
+                                </flux:badge>
+
+                                <flux:menu>
+                                    <flux:menu.radio.group wire:change="changeStatus" wire:model="status">
+                                        <flux:menu.radio value="pending">{{ __('Pending') }}</flux:menu.radio>
+                                        <flux:menu.radio value="completed">{{ __('Completed') }}</flux:menu.radio>
+                                    </flux:menu.radio.group>
+                                </flux:menu>
+                            </flux:dropdown>
+                            @else
+                            <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
+                            @endcan
                         </div>
                     </div>
                     <div class="min-h-2 sm:min-h-4"></div>

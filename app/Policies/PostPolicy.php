@@ -68,4 +68,9 @@ class PostPolicy
     {
         return true;
     }
+
+    public function updateStatus(User $user, Post $post): bool
+    {
+        return $user->isAdmin();
+    }
 }
