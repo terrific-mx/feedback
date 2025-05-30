@@ -26,7 +26,11 @@ class Post extends Model
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => match ($attributes['status']) {
                 'pending' => __('Pending'),
+                'reviewing' => __('Reviewing'),
+                'planned' => __('Planned'),
+                'in progress' => __('In Progress'),
                 'completed' => __('Completed'),
+                'closed' => __('Closed'),
                 default => __(ucfirst($attributes['status'])),
             },
         );
@@ -37,6 +41,10 @@ class Post extends Model
         return Attribute::make(
             get: fn (mixed $value, array $attributes) => match ($attributes['status']) {
                 'pending' => 'yellow',
+                'reviewing' => 'amber',
+                'planned' => 'sky',
+                'in progress' => 'purple',
+                'closed' => 'zinc',
                 'completed' => 'green',
                 default => 'zinc',
             },

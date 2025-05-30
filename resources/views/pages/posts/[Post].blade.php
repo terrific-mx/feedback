@@ -11,12 +11,12 @@ new class extends Component {
     public ?Collection $comments = null;
 
     public string $description = '';
-    public string $status;
+    public string $status = 'pending';
 
     public function mount()
     {
         $this->comments = $this->post->comments()->oldest()->get();
-        $this->satus = $this->post->status;
+        $this->status = $this->post->status;
     }
 
     public function comment(): void
@@ -42,7 +42,7 @@ new class extends Component {
         $this->authorize('updateStatus', $this->post);
 
         $this->validate([
-            'status' => 'required|in:pending,completed',
+            'status' => 'required|in:pending,reviewing,planned,in progress,completed,closed',
         ]);
 
         $this->post->update(['status' => $this->status]);
@@ -86,7 +86,11 @@ new class extends Component {
                                 <flux:menu>
                                     <flux:menu.radio.group wire:change="changeStatus" wire:model="status">
                                         <flux:menu.radio value="pending">{{ __('Pending') }}</flux:menu.radio>
+                                        <flux:menu.radio value="reviewing">{{ __('Reviewing') }}</flux:menu.radio>
+                                        <flux:menu.radio value="planned">{{ __('Planned') }}</flux:menu.radio>
+                                        <flux:menu.radio value="in progress">{{ __('In Progress') }}</flux:menu.radio>
                                         <flux:menu.radio value="completed">{{ __('Completed') }}</flux:menu.radio>
+                                        <flux:menu.radio value="closed">{{ __('Closed') }}</flux:menu.radio>
                                     </flux:menu.radio.group>
                                 </flux:menu>
                             </flux:dropdown>
