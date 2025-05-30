@@ -26,7 +26,11 @@
             <flux:spacer />
 
             <!-- Desktop User Menu -->
-            @auth
+            @guest
+            <flux:button :href="route('login')" variant="ghost" size="sm" class="hidden lg:inline-flex">
+                {{ __('Sign In') }}
+            </flux:button>
+            @else
             <flux:dropdown position="top" align="end">
                 <flux:profile
                     :avatar="auth()->user()->avatar ?: null"
@@ -74,7 +78,7 @@
                     </form>
                 </flux:menu>
             </flux:dropdown>
-            @endauth
+            @endguest
         </flux:header>
 
         <!-- Mobile Menu -->
