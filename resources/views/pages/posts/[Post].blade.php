@@ -30,7 +30,8 @@ new class extends Component {
         ]);
 
         $this->reset('description');
-        $this->post->refresh();
+
+        $this->comments = $this->post->comments()->oldest()->get();
     }
 }; ?>
 
@@ -76,7 +77,15 @@ new class extends Component {
                         <flux:text variant="strong">{{ $comment->description }}</flux:text>
                         <div class="min-h-2 sm:min-h-4"></div>
                         <div class="flex flex-row sm:items-center gap-2">
+                            @if ($comment->user->isAdmin())
+                            <flux:avatar :src="$comment->user->avatar" size="xs" class="shrink-0" badge:circle badge:color="yellow">
+                                <x-slot:badge>
+                                    <flux:icon.star variant="micro" class="w-2 text-white" />
+                                </x-slot:badge>
+                            </flux:avatar>
+                            @else
                             <flux:avatar :src="$comment->user->avatar" size="xs" class="shrink-0" />
+                            @endif
                             <div class="flex flex-col gap-0.5 sm:gap-2 sm:flex-row sm:items-center">
                                 <div class="flex items-center gap-2">
                                     <flux:heading>{{ $comment->user->name }}</flux:heading>

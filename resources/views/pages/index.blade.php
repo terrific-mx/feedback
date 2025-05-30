@@ -36,7 +36,15 @@ new class extends Component {
                         </div>
                         <div class="min-h-2 sm:min-h-4"></div>
                         <div class="flex flex-row sm:items-center gap-2">
+                            @if ($post->user->isAdmin())
+                            <flux:avatar :src="$post->user->avatar" size="xs" class="shrink-0" badge:circle badge:color="yellow">
+                                <x-slot:badge>
+                                    <flux:icon.star variant="micro" class="w-2 text-white" />
+                                </x-slot:badge>
+                            </flux:avatar>
+                            @else
                             <flux:avatar :src="$post->user->avatar" size="xs" class="shrink-0" />
+                            @endif
                             <div class="flex flex-col gap-0.5 sm:gap-2 sm:flex-row sm:items-center">
                                 <div class="flex items-center gap-2">
                                     <flux:heading>{{ $post->user->name }}</flux:heading>
