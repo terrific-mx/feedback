@@ -23,5 +23,11 @@
     "System": "Sistema",
     "Title": "Título",
     "Update your account's appearance settings": "Actualiza la configuración de apariencia de tu cuenta",
-    "Update your name and email address": "Actualiza tu nombre y dirección de correo electrónico"
+    "Update your name and email address": "Actualiza tu nombre y dirección de correo electrónico",
+    "Pending": "Pendiente",
+    "Reviewing": "Revisando",
+    "Planned": "Planificado",
+    "In Progress": "En progreso",
+    "Completed": "Completado",
+    "Closed": "Cerrado"
 }
