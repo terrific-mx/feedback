@@ -14,6 +14,7 @@ new class extends Component {
     public ?Collection $boards;
     public string $title = '';
     public string $description = '';
+    public ?int $board = null;
 
     public function mount()
     {
@@ -25,9 +26,11 @@ new class extends Component {
         $this->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
+            'board' => 'nullable|exists:boards,id',
         ]);
 
         Auth::user()->posts()->create([
+            'board_id' => $this->board,
             'title' => $this->title,
             'description' => $this->description,
         ]);
@@ -50,9 +53,12 @@ new class extends Component {
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
                 <flux:input wire:model="title" :label="__('Title')" required />
                 <flux:textarea wire:model="description" :label="__('Description')" required />
-                <flux:radio.group wire:model="board" :label="__('Board')" required>
+                <flux:radio.group wire:model="board" :label="__('Board')" variant="cards" class="grid grid-cols-2">
                     @foreach ($boards as $board)
-                        <flux:radio value="{{ $board->id }}" :label="$board->name" />
+                        <flux:radio :value="$board->id" class="items-center">
+                            <flux:badge :color="$board->color" variant="pill" inset="top bottom">{{ $board->name }}</flux:badge>
+                            <flux:radio.indicator />
+                        </flux:radio>
                     @endforeach
                 </flux:radio.group>
                 <div class="flex justify-end">

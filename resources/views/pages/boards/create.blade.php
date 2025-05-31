@@ -10,7 +10,7 @@ middleware(['auth', ValidateSessionWithWorkOS::class, 'can:create,App\Models\Boa
 
 new class extends Component {
     public string $name = '';
-    public string $color = 'Zinc';
+    public string $color = 'zinc';
 
     public function create(): void
     {
