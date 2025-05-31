@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -9,14 +10,19 @@ use Livewire\Volt\Component;
 new class extends Component {
     public Post $post;
     public ?Collection $comments = null;
+    public ?Collection $boards = null;
 
     public string $description = '';
     public string $status = 'pending';
+    public ?string $board = null;
 
     public function mount()
     {
         $this->comments = $this->post->comments()->oldest()->get();
+        $this->boards = Board::all();
+
         $this->status = $this->post->status;
+        $this->board = $this->post->board?->id;
     }
 
     public function comment(): void
@@ -49,6 +55,19 @@ new class extends Component {
 
         $this->post->refresh();
     }
+
+    public function changeBoard()
+    {
+        $this->authorize('updateBoard', $this->post);
+
+        $this->validate([
+            'board' => 'required|exists:boards,id',
+        ]);
+
+        $this->post->update(['board_id' => $this->board]);
+
+        $this->post->refresh();
+    }
 }; ?>
 
 <x-layouts.board>
@@ -77,6 +96,23 @@ new class extends Component {
                                 <flux:heading>{{ $post->user->name }}</flux:heading>
                             </div>
                             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
+                            @can('updateBoard', $post)
+                            <flux:dropdown>
+                                <flux:badge as="button" :color="$post->board?->color ?? 'zinc'" icon:trailing="chevron-down" size="sm">
+                                    {{ $post->board?->name ?? __('No Board') }}
+                                </flux:badge>
+
+                                <flux:menu>
+                                    <flux:menu.radio.group wire:change="changeBoard" wire:model="board">
+                                        @foreach ($boards as $board)
+                                        <flux:menu.radio :value="$board->id">{{ $board->name }}</flux:menu.radio>
+                                        @endforeach
+                                    </flux:menu.radio.group>
+                                </flux:menu>
+                            </flux:dropdown>
+                            @elseif ($post->board)
+                            <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
+                            @endcan
                             @can('updateStatus', $post)
                             <flux:dropdown>
                                 <flux:badge as="button" :color="$post->status_color" icon:trailing="chevron-down" size="sm">

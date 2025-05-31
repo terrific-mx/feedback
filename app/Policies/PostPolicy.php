@@ -73,4 +73,9 @@ class PostPolicy
     {
         return $user->isAdmin();
     }
+
+    public function updateBoard(User $user, Post $post): bool
+    {
+        return $user->isAdmin();
+    }
 }
