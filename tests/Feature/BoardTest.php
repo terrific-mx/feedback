@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 
+use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertDatabaseMissing;
 
 uses(RefreshDatabase::class);
@@ -49,5 +50,67 @@ describe('index', function () {
 });
 
 describe('create', function () {
+    it('renders the create form for admin users', function () {
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
 
+        actingAs($adminUser)->get('/boards/create')->assertSuccessful();
+    });
+
+    it('denies access to create form for non-admin users', function () {
+        $user = User::factory()->create(['email' => 'test@example.com']);
+
+        actingAs($user)->get('/boards/create')->assertForbidden();
+    });
+
+    it('validates the name field is required', function () {
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        $component = Volt::actingAs($adminUser)->test('pages.boards.create')
+            ->set('name', '')
+            ->set('color', 'Zinc')
+            ->call('create');
+
+        $component->assertHasErrors(['name' => 'required']);
+    });
+
+    it('validates the color field is required and valid', function () {
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        $component = Volt::actingAs($adminUser)->test('pages.boards.create')
+            ->set('name', 'Test Board')
+            ->set('color', '')
+            ->call('create');
+
+        $component->assertHasErrors(['color' => 'required']);
+
+        $component->set('color', 'InvalidColor')
+            ->call('create');
+
+        $component->assertHasErrors(['color' => 'in']);
+    });
+
+    it('creates a board successfully with valid data', function () {
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        Volt::actingAs($adminUser)->test('pages.boards.create')
+            ->set('name', 'Test Board')
+            ->set('color', 'Zinc')
+            ->call('create');
+
+        $this->assertDatabaseHas('boards', [
+            'name' => 'Test Board',
+            'color' => 'Zinc',
+        ]);
+    });
+
+    it('redirects to the boards index after creation', function () {
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        $component = Volt::actingAs($adminUser)->test('pages.boards.create')
+            ->set('name', 'Test Board')
+            ->set('color', 'Zinc')
+            ->call('create');
+
+        $component->assertRedirect('/boards');
+    });
 });
