@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Board;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -69,6 +70,31 @@ describe('create', function () {
             ->set('description', 'Test description')
             ->call('create')
             ->assertHasErrors(['title' => 'max']);
+    });
+
+    it('creates a post with associated board', function () {
+        $user = User::factory()->create();
+        $board = Board::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('title', 'Test title')
+            ->set('description', 'Test description')
+            ->set('board', $board->id)
+            ->call('create');
+
+        expect(Post::first())->title->toBe('Test title')
+            ->description->toBe('Test description')
+            ->user_id->toBe($user->id)
+            ->board_id->toBe($board->id);
+    });
+
+    it('validates board exists', function () {
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('board', 999)
+            ->call('create')
+            ->assertHasErrors(['board' => 'exists']);
     });
 });
 

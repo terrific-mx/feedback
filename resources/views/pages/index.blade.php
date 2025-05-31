@@ -1,15 +1,19 @@
 <?php
 
+use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
 
 new class extends Component {
     public ?Collection $posts = null;
+    public ?Collection $boards = null;
+    public string $board = 'all';
 
     public function mount()
     {
         $this->posts = Post::latest()->get();
+        $this->boards = Board::all();
     }
 }; ?>
 
@@ -22,6 +26,22 @@ new class extends Component {
                         <flux:heading size="lg" class="text-lg">{{ __('All feedback') }}</flux:heading>
                     </div>
                     <flux:spacer />
+
+                    <div class="flex items-center gap-2">
+                        <flux:select wire:model="board" variant="listbox" class="sm:max-w-fit">
+                            <x-slot name="trigger">
+                                <flux:select.button size="sm">
+                                    <flux:icon.funnel variant="micro" class="mr-2 text-zinc-400" />
+                                    <flux:select.selected />
+                                </flux:select.button>
+                            </x-slot>
+                            <flux:select.option value="all">{{ __('All') }}</flux:select.option>
+                            @foreach ($boards as $board)
+                            <flux:select.option :value="$board->id">{{ $board->name }}</flux:select.option>
+                            @endforeach
+                        </flux:select>
+                    </div>
+
                     <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
                 </div>
             </div>
