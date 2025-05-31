@@ -183,3 +183,39 @@ describe('show', function () {
             ->assertHasErrors(['board' => 'exists']);
     });
 });
+
+describe('board filter', function () {
+    it('defaults to showing all posts', function () {
+        $post1 = Post::factory()->create();
+        $post2 = Post::factory()->create();
+
+        Volt::test('pages.index')
+            ->assertSee($post1->title)
+            ->assertSee($post2->title);
+    });
+
+    it('filters posts by board', function () {
+        $board = Board::factory()->create();
+        $post1 = Post::factory()->create(['title' => 'Post 1', 'board_id' => $board->id]);
+        $post2 = Post::factory()->create(['title' => 'Post 2']);
+
+        Volt::test('pages.index')
+            ->set('board_filter', $board->id)
+            ->assertSee($post1->title)
+            ->assertDontSee($post2->title);
+    });
+
+    it('shows all posts when switching back to "all"', function () {
+        $board = Board::factory()->create();
+        $post1 = Post::factory()->create(['title' => 'Post 1', 'board_id' => $board->id]);
+        $post2 = Post::factory()->create(['title' => 'Post 2']);
+
+        Volt::test('pages.index')
+            ->set('board_filter', $board->id)
+            ->assertSee($post1->title)
+            ->assertDontSee($post2->title)
+            ->set('board_filter', 'all')
+            ->assertSee($post1->title)
+            ->assertSee($post2->title);
+    });
+});
