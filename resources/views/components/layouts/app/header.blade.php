@@ -62,19 +62,13 @@
                         </div>
                     </flux:menu.radio.group>
 
-                    <flux:menu.separator />
-
-                    <flux:menu.radio.group>
+                    <flux:menu.group>
                         <flux:menu.item :href="route('settings.profile')" wire:navigate>{{ __('Settings') }}</flux:menu.item>
-                    </flux:menu.radio.group>
+                    </flux:menu.group>
 
-                    <flux:menu.separator />
-
-                    <flux:menu.radio.group>
+                    <flux:menu.group :heading="__('Admin')">
                         <flux:menu.item href="/boards" wire:navigate>{{ __('Boards') }}</flux:menu.item>
-                    </flux:menu.radio.group>
-
-                    <flux:menu.separator />
+                    </flux:menu.group>
 
                     <form method="POST" action="{{ route('logout') }}" class="w-full">
                         @csrf
