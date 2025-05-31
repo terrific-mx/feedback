@@ -16,7 +16,7 @@ new class extends Component {
     {
         $this->validate([
             'name' => 'required|string|max:255',
-            'color' => 'required|string|in:Zinc,Red,Orange,Amber,Yellow,Lime,Green,Emerald,Teal,Cyan,Sky,Blue,Indigo,Violet,Purple,Fuchsia,Pink,Rose',
+            'color' => 'required|string|in:zinc,red,orange,amber,yellow,lime,green,emerald,teal,cyan,sky,blue,indigo,violet,purple,fuchsia,pink,rose',
         ]);
 
         Board::create([
@@ -42,24 +42,24 @@ new class extends Component {
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
                 <flux:input wire:model="name" :label="__('Name')" :placeholder="__('Features')" required />
                 <flux:select wire:model="color" :label="__('Color')" required>
-                    <flux:select.option value="Zinc">{{ __('Zinc') }}</flux:select.option>
-                    <flux:select.option value="Red">{{ __('Red') }}</flux:select.option>
-                    <flux:select.option value="Orange">{{ __('Orange') }}</flux:select.option>
-                    <flux:select.option value="Amber">{{ __('Amber') }}</flux:select.option>
-                    <flux:select.option value="Yellow">{{ __('Yellow') }}</flux:select.option>
-                    <flux:select.option value="Lime">{{ __('Lime') }}</flux:select.option>
-                    <flux:select.option value="Green">{{ __('Green') }}</flux:select.option>
-                    <flux:select.option value="Emerald">{{ __('Emerald') }}</flux:select.option>
-                    <flux:select.option value="Teal">{{ __('Teal') }}</flux:select.option>
-                    <flux:select.option value="Cyan">{{ __('Cyan') }}</flux:select.option>
-                    <flux:select.option value="Sky">{{ __('Sky') }}</flux:select.option>
-                    <flux:select.option value="Blue">{{ __('Blue') }}</flux:select.option>
-                    <flux:select.option value="Indigo">{{ __('Indigo') }}</flux:select.option>
-                    <flux:select.option value="Violet">{{ __('Violet') }}</flux:select.option>
-                    <flux:select.option value="Purple">{{ __('Purple') }}</flux:select.option>
-                    <flux:select.option value="Fuchsia">{{ __('Fuchsia') }}</flux:select.option>
-                    <flux:select.option value="Pink">{{ __('Pink') }}</flux:select.option>
-                    <flux:select.option value="Rose">{{ __('Rose') }}</flux:select.option>
+                    <flux:select.option value="zinc">{{ __('Zinc') }}</flux:select.option>
+                    <flux:select.option value="red">{{ __('Red') }}</flux:select.option>
+                    <flux:select.option value="orange">{{ __('Orange') }}</flux:select.option>
+                    <flux:select.option value="amber">{{ __('Amber') }}</flux:select.option>
+                    <flux:select.option value="yellow">{{ __('Yellow') }}</flux:select.option>
+                    <flux:select.option value="lime">{{ __('Lime') }}</flux:select.option>
+                    <flux:select.option value="green">{{ __('Green') }}</flux:select.option>
+                    <flux:select.option value="emerald">{{ __('Emerald') }}</flux:select.option>
+                    <flux:select.option value="teal">{{ __('Teal') }}</flux:select.option>
+                    <flux:select.option value="cyan">{{ __('Cyan') }}</flux:select.option>
+                    <flux:select.option value="sky">{{ __('Sky') }}</flux:select.option>
+                    <flux:select.option value="blue">{{ __('Blue') }}</flux:select.option>
+                    <flux:select.option value="indigo">{{ __('Indigo') }}</flux:select.option>
+                    <flux:select.option value="violet">{{ __('Violet') }}</flux:select.option>
+                    <flux:select.option value="purple">{{ __('Purple') }}</flux:select.option>
+                    <flux:select.option value="fuchsia">{{ __('Fuchsia') }}</flux:select.option>
+                    <flux:select.option value="pink">{{ __('Pink') }}</flux:select.option>
+                    <flux:select.option value="rose">{{ __('Rose') }}</flux:select.option>
                 </flux:select>
                 <div class="flex justify-end">
                     <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>

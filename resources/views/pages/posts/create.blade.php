@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Board;
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
 use Laravel\WorkOS\Http\Middleware\ValidateSessionWithWorkOS;
@@ -9,8 +11,14 @@ use function Laravel\Folio\middleware;
 middleware(['auth', ValidateSessionWithWorkOS::class]);
 
 new class extends Component {
+    public ?Collection $boards;
     public string $title = '';
     public string $description = '';
+
+    public function mount()
+    {
+        $this->boards = Board::all();
+    }
 
     public function create(): void
     {
@@ -42,6 +50,11 @@ new class extends Component {
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
                 <flux:input wire:model="title" :label="__('Title')" required />
                 <flux:textarea wire:model="description" :label="__('Description')" required />
+                <flux:radio.group wire:model="board" :label="__('Board')" required>
+                    @foreach ($boards as $board)
+                        <flux:radio value="{{ $board->id }}" :label="$board->name" />
+                    @endforeach
+                </flux:radio.group>
                 <div class="flex justify-end">
                     <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
                 </div>

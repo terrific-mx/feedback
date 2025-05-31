@@ -94,12 +94,12 @@ describe('create', function () {
 
         Volt::actingAs($adminUser)->test('pages.boards.create')
             ->set('name', 'Test Board')
-            ->set('color', 'Zinc')
+            ->set('color', 'zinc')
             ->call('create');
 
         $this->assertDatabaseHas('boards', [
             'name' => 'Test Board',
-            'color' => 'Zinc',
+            'color' => 'zinc',
         ]);
     });
 
@@ -108,7 +108,7 @@ describe('create', function () {
 
         $component = Volt::actingAs($adminUser)->test('pages.boards.create')
             ->set('name', 'Test Board')
-            ->set('color', 'Zinc')
+            ->set('color', 'zinc')
             ->call('create');
 
         $component->assertRedirect('/boards');
