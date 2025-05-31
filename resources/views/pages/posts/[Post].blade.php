@@ -79,7 +79,7 @@ new class extends Component {
                             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
                             @can('updateStatus', $post)
                             <flux:dropdown>
-                                <flux:badge as="button" variant="pill" :color="$post->status_color" icon:trailing="chevron-down" size="sm">
+                                <flux:badge as="button" :color="$post->status_color" icon:trailing="chevron-down" size="sm">
                                     {{ $post->formatted_status }}
                                 </flux:badge>
 
@@ -97,6 +97,9 @@ new class extends Component {
                             @else
                             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
                             @endcan
+                            <flux:tooltip :content="__('Comments')">
+                                <flux:badge size="sm" icon="chat-bubble-left-right">{{ $post->comments->count() }}</flux:badge>
+                            </flux:tooltip>
                         </div>
                     </div>
                     <div class="min-h-2 sm:min-h-4"></div>
