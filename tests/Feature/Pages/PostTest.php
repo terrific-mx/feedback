@@ -150,4 +150,36 @@ describe('show', function () {
             ->call('changeStatus')
             ->assertHasErrors(['status' => 'in']);
     });
+
+    it('can change the board of a post', function () {
+        $post = Post::factory()->create();
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+        $board = Board::factory()->create();
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('board', $board->id)
+            ->call('changeBoard');
+
+        expect($post->fresh())->board_id->toBe($board->id);
+    });
+
+    it('requires authentication to change the board', function () {
+        $post = Post::factory()->create();
+        $board = Board::factory()->create();
+
+        Volt::test('pages.posts.show', ['post' => $post])
+            ->set('board', $board->id)
+            ->call('changeBoard')
+            ->assertForbidden();
+    });
+
+    it('validates the board exists', function () {
+        $post = Post::factory()->create();
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('board', 999)
+            ->call('changeBoard')
+            ->assertHasErrors(['board' => 'exists']);
+    });
 });
