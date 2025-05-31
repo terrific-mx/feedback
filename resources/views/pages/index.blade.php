@@ -64,6 +64,7 @@ new class extends Component {
                             {{ __('All feedback') }}
                             @endif
                         </flux:heading>
+                        <flux:text>{{ $posts->count() }}</flux:text>
                     </div>
                     <flux:spacer />
 
