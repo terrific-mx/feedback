@@ -8,6 +8,7 @@
     "Are you sure?": "¿Estás seguro?",
     "Blue": "Azul",
     "Boards": "Tableros",
+    "Bugs": "Errores",
     "Cancel": "Cancelar",
     "Closed": "Cerrado",
     "Comment": "Comentar",
@@ -21,6 +22,7 @@
     "Description": "Descripción",
     "Email": "Correo electrónico",
     "Emerald": "Esmeralda",
+    "Features": "Funcionalidades",
     "Fuchsia": "Fucsia",
     "Green": "Verde",
     "Home": "Inicio",
@@ -28,6 +30,7 @@
     "Indigo": "Índigo",
     "Light": "Claro",
     "Lime": "Lima",
+    "Log Out": "Cerrar sesión",
     "Name": "Nombre",
     "New board": "Nuevo tablero",
     "New post": "Nueva publicación",
@@ -53,8 +56,5 @@
     "Update your name and email address": "Actualiza tu nombre y dirección de correo electrónico",
     "Violet": "Violeta",
     "Yellow": "Amarillo",
-    "Zinc": "Zinc",
-    "Log Out": "Cerrar sesión",
-    "Features": "Funcionalidades",
-    "Bugs": "Errores"
+    "Zinc": "Zinc"
 }
