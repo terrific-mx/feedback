@@ -8,12 +8,33 @@ use Livewire\Volt\Component;
 new class extends Component {
     public ?Collection $posts = null;
     public ?Collection $boards = null;
-    public string $board = 'all';
+    public ?Board $currentBoard = null;
+
+    public string $board_filter = 'all';
 
     public function mount()
     {
-        $this->posts = Post::latest()->get();
         $this->boards = Board::all();
+        $this->filterPosts();
+    }
+
+    public function updatedBoardFilter($board)
+    {
+        if ($this->board_filter !== 'all') {
+            $this->validate(['board_filter' => 'exists:boards,id']);
+            $this->currentBoard = Board::find($board);
+        } else {
+            $this->currentBoard = null;
+        }
+
+        $this->filterPosts();
+    }
+
+    protected function filterPosts()
+    {
+        $this->posts = $this->currentBoard
+            ? Post::where('board_id', $this->board_filter)->latest()->get()
+            : Post::latest()->get();
     }
 }; ?>
 
@@ -28,14 +49,14 @@ new class extends Component {
                     <flux:spacer />
 
                     <div class="flex items-center gap-2">
-                        <flux:select wire:model="board" variant="listbox" class="sm:max-w-fit">
+                        <flux:select wire:model.live="board_filter" variant="listbox" class="sm:max-w-fit">
                             <x-slot name="trigger">
                                 <flux:select.button size="sm">
                                     <flux:icon.funnel variant="micro" class="mr-2 text-zinc-400" />
                                     <flux:select.selected />
                                 </flux:select.button>
                             </x-slot>
-                            <flux:select.option value="all">{{ __('All') }}</flux:select.option>
+                            <flux:select.option value="">{{ __('All') }}</flux:select.option>
                             @foreach ($boards as $board)
                             <flux:select.option :value="$board->id">{{ $board->name }}</flux:select.option>
                             @endforeach
