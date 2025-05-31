@@ -98,7 +98,7 @@ new class extends Component {
                             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
                             @endcan
                             <flux:tooltip :content="__('Comments')">
-                                <flux:badge size="sm" icon="chat-bubble-left-right">{{ $post->comments->count() }}</flux:badge>
+                                <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
                             </flux:tooltip>
                         </div>
                     </div>
