@@ -14,20 +14,33 @@ new class extends Component {
 
     public function mount()
     {
-        $this->boards = Board::all();
+        $this->loadBoards();
         $this->filterPosts();
     }
 
     public function updatedBoardFilter($board)
     {
+        $this->resetCurrentBoard();
+        $this->validateBoardFilter();
+        $this->filterPosts();
+    }
+
+    protected function loadBoards()
+    {
+        $this->boards = Board::all();
+    }
+
+    protected function resetCurrentBoard()
+    {
+        $this->currentBoard = null;
+    }
+
+    protected function validateBoardFilter()
+    {
         if ($this->board_filter !== 'all') {
             $this->validate(['board_filter' => 'exists:boards,id']);
-            $this->currentBoard = $this->boards->firstWhere('id', $board);
-        } else {
-            $this->currentBoard = null;
+            $this->currentBoard = $this->boards->firstWhere('id', $this->board_filter);
         }
-
-        $this->filterPosts();
     }
 
     protected function filterPosts()
