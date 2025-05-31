@@ -1,5 +1,6 @@
 {
     "Add a comment...": "Agregar un comentario...",
+    "All": "Todo",
     "All feedback": "Todo el feedback",
     "Amber": "Ámbar",
     "Appearance": "Apariencia",
@@ -42,6 +43,7 @@
     "Rose": "Rosa claro",
     "Save": "Guardar",
     "Saved.": "Guardado.",
+    "Settings": "Configuración",
     "Sky": "Cielo",
     "Submission": "Propuesta",
     "System": "Sistema",
@@ -51,7 +53,5 @@
     "Update your name and email address": "Actualiza tu nombre y dirección de correo electrónico",
     "Violet": "Violeta",
     "Yellow": "Amarillo",
-    "Zinc": "Zinc",
-    "All": "Todo",
-    "Settings": "Configuración"
+    "Zinc": "Zinc"
 }
