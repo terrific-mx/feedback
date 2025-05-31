@@ -22,7 +22,7 @@ new class extends Component {
     {
         if ($this->board_filter !== 'all') {
             $this->validate(['board_filter' => 'exists:boards,id']);
-            $this->currentBoard = Board::find($board);
+            $this->currentBoard = $this->boards->firstWhere('id', $board);
         } else {
             $this->currentBoard = null;
         }
@@ -32,9 +32,9 @@ new class extends Component {
 
     protected function filterPosts()
     {
-        $this->posts = $this->currentBoard
-            ? Post::where('board_id', $this->board_filter)->latest()->get()
-            : Post::latest()->get();
+        $this->posts = $this->board_filter === 'all'
+            ? Post::latest()->get()
+            : Post::where('board_id', $this->board_filter)->latest()->get();
     }
 }; ?>
 
