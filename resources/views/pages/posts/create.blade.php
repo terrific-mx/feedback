@@ -31,6 +31,7 @@ new class extends Component {
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'board' => 'nullable|exists:boards,id',
+            'images' => 'nullable|array|max:4',
             'images.*' => 'nullable|image|max:1024', // 1MB Max
         ]);
 

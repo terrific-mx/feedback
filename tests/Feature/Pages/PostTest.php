@@ -5,6 +5,8 @@ use App\Models\Post;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 use function Pest\Laravel\get;
 
@@ -95,6 +97,61 @@ describe('create', function () {
             ->set('board', 999)
             ->call('create')
             ->assertHasErrors(['board' => 'exists']);
+    });
+
+    it('can create a post with images', function () {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $image1 = UploadedFile::fake()->image('post_image1.jpg');
+        $image2 = UploadedFile::fake()->image('post_image2.png');
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('title', 'Test title with images')
+            ->set('description', 'Test description with images')
+            ->set('images', [$image1, $image2])
+            ->call('create');
+
+        $post = Post::first();
+
+        expect($post)->title->toBe('Test title with images')
+            ->description->toBe('Test description with images')
+            ->user_id->toBe($user->id)
+            ->image_paths->toHaveCount(2);
+
+        Storage::disk('public')->assertExists('post_images/' . $image1->hashName());
+        Storage::disk('public')->assertExists('post_images/' . $image2->hashName());
+    });
+
+    it('validates images are of correct type and size', function () {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $invalidFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+        $largeImage = UploadedFile::fake()->image('large.jpg')->size(2000);
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('images', [$invalidFile, $largeImage])
+            ->call('create')
+            ->assertHasErrors(['images.0' => 'image', 'images.1' => 'max']);
+    });
+
+    it('limits image uploads to 4', function () {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $images = [
+            UploadedFile::fake()->image('img1.jpg'),
+            UploadedFile::fake()->image('img2.jpg'),
+            UploadedFile::fake()->image('img3.jpg'),
+            UploadedFile::fake()->image('img4.jpg'),
+            UploadedFile::fake()->image('img5.jpg'),
+        ];
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('images', $images)
+            ->call('create')
+            ->assertHasErrors(['images' => 'max']);
     });
 });
 

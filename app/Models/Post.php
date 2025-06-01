@@ -18,7 +18,7 @@ class Post extends Model
     protected function casts(): array
     {
         return [
-            'images_paths' => 'array',
+            'image_paths' => 'array',
         ];
     }
 
