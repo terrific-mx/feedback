@@ -7,28 +7,30 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
     /** @use HasFactory<\Database\Factories\PostFactory> */
     use HasFactory;
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function board()
+    public function board(): BelongsTo
     {
         return $this->belongsTo(Board::class);
     }
 
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
 
-    public function votes()
+    public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
     }
@@ -36,6 +38,16 @@ class Post extends Model
     public function hasVoted(User $user): bool
     {
         return $this->votes()->where('user_id', $user->id)->exists();
+    }
+
+    public function addVote(User $user): void
+    {
+        $this->votes()->create(['user_id' => $user->id]);
+    }
+
+    public function removeVote(User $user): void
+    {
+        $this->votes()->where('user_id', $user->id)->delete();
     }
 
     #[Scope]

@@ -20,9 +20,9 @@ new class extends Component {
         $this->authorize('vote', $this->post);
 
         if ($this->post->hasVoted(auth()->user())) {
-            $this->post->votes()->where('user_id', auth()->id())->delete();
+            $this->post->removeVote(auth()->user());
         } else {
-            $this->post->votes()->create(['user_id' => auth()->id()]);
+            $this->post->addVote(auth()->user());
         }
 
         $this->post->refresh();
