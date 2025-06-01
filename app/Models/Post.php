@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Post extends Model
 {
@@ -119,6 +120,15 @@ class Post extends Model
                 'completed' => 'green',
                 default => 'zinc',
             },
+        );
+    }
+
+    protected function imageUrls(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => collect($this->image_paths)
+                ->map(fn (string $path) => Storage::disk('public')->url($path))
+                ->toArray(),
         );
     }
 }
