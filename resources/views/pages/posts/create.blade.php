@@ -74,8 +74,15 @@ new class extends Component {
                     @endforeach
                 </flux:radio.group>
                 <div>
-                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images (Max 4)')" />
+                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images')" :badge="__('Max 4')" />
                 </div>
+                @if (count($images) > 0)
+                <div class="grid grid-cols-4 gap-4 mt-4">
+                    @foreach ($images as $image)
+                    <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
+                    @endforeach
+                </div>
+                @endif
                 <div class="flex justify-end">
                     <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
                 </div>
