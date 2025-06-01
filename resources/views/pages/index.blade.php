@@ -17,19 +17,19 @@ new class extends Component {
     public function mount()
     {
         $this->loadBoards();
-        $this->filterPosts();
+        $this->applyFiltersAndSorting();
     }
 
     public function updatedBoardFilter($board)
     {
         $this->resetCurrentBoard();
         $this->validateBoardFilter();
-        $this->filterPosts();
+        $this->applyFiltersAndSorting();
     }
 
     public function updatedSort($sort)
     {
-        $this->filterPosts();
+        $this->applyFiltersAndSorting();
     }
 
     protected function loadBoards()
@@ -50,19 +50,19 @@ new class extends Component {
         }
     }
 
-    protected function filterPosts()
+    protected function applyFiltersAndSorting()
     {
         $query = Post::query();
 
-        if ($this->board_filter !== 'all') {
-            $query->where('board_id', $this->board_filter);
+        if ($this->currentBoard) {
+            $query->byBoard($this->currentBoard);
         }
 
-        if ($this->sort === 'top') {
-            $query->withCount('votes')->orderByDesc('votes_count');
-        } else {
-            $query->latest();
-        }
+        match ($this->sort) {
+            'top' => $query->top(),
+            'newest' => $query->latest(),
+            default => $query->latest(),
+        };
 
         $this->posts = $query->get();
     }

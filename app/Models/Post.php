@@ -73,6 +73,18 @@ class Post extends Model
         $query->where('status', 'completed');
     }
 
+    #[Scope]
+    protected function top(Builder $query): void
+    {
+        $query->withCount('votes')->orderByDesc('votes_count');
+    }
+
+    #[Scope]
+    protected function byBoard(Builder $query, Board $board): void
+    {
+        $query->where('board_id', $board->id);
+    }
+
     protected function formattedStatus(): Attribute
     {
         return Attribute::make(
