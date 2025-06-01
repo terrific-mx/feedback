@@ -75,9 +75,6 @@ new class extends Component {
                 </flux:radio.group>
                 <div>
                     <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images (Max 4)')" />
-                    @error('images.*')
-                        <span class="text-red-500">{{ $message }}</span>
-                    @enderror
                 </div>
                 <div class="flex justify-end">
                     <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
