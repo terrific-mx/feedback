@@ -18,9 +18,8 @@
             </flux:brand>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item href="/">
-                    {{ __('Home') }}
-                </flux:navbar.item>
+                <flux:navbar.item href="/">{{ __('Home') }}</flux:navbar.item>
+                <flux:navbar.item href="/roadmap">{{ __('Roadmap') }}</flux:navbar.item>
             </flux:navbar>
 
             <flux:spacer />
@@ -97,9 +96,8 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group>
-                    <flux:navlist.item href="/">
-                        {{ __('Home') }}
-                    </flux:navlist.item>
+                    <flux:navlist.item href="/">{{ __('Home') }}</flux:navlist.item>
+                    <flux:navlist.item href="/roadmap">{{ __('Roadmap') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

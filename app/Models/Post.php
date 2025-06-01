@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -24,6 +25,12 @@ class Post extends Model
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    #[Scope]
+    protected function roadmap()
+    {
+        return $this->whereIn('status', ['planned', 'in progress', 'completed']);
     }
 
     protected function formattedStatus(): Attribute
