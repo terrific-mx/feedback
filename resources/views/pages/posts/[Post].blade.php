@@ -133,6 +133,7 @@ new class extends Component {
                             @else
                             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
                             @endcan
+                            <livewire:vote-button :$post :key="'vote-button-'.$post->id" />
                             <flux:tooltip :content="__('Comments')">
                                 <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
                             </flux:tooltip>
