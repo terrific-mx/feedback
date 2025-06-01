@@ -50,6 +50,11 @@ class Post extends Model
         $this->votes()->where('user_id', $user->id)->delete();
     }
 
+    public function toggleVote(User $user): void
+    {
+        $this->hasVoted($user) ? $this->removeVote($user) : $this->addVote($user);
+    }
+
     #[Scope]
     protected function planned(Builder $query)
     {

@@ -19,11 +19,7 @@ new class extends Component {
     {
         $this->authorize('vote', $this->post);
 
-        if ($this->post->hasVoted(auth()->user())) {
-            $this->post->removeVote(auth()->user());
-        } else {
-            $this->post->addVote(auth()->user());
-        }
+        $this->post->toggleVote(auth()->user());
 
         $this->post->refresh();
 
