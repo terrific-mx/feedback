@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
+use Illuminate\Support\Facades\Storage;
 
 new class extends Component {
     public Post $post;
     public ?Collection $comments = null;
     public ?Collection $boards = null;
+    public array $images = [];
 
     public string $description = '';
     public string $status = 'pending';
@@ -20,6 +22,7 @@ new class extends Component {
     {
         $this->comments = $this->post->comments()->oldest()->get();
         $this->boards = Board::all();
+        $this->images = $this->post->image_paths ?? [];
 
         $this->status = $this->post->status;
         $this->board = $this->post->board?->id;
@@ -89,6 +92,14 @@ new class extends Component {
                         <flux:text variant="strong">{{ $post->description }}</flux:text>
                     </div>
                     <div class="min-h-2 sm:min-h-4"></div>
+                    @if (count($images) > 0)
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            @foreach ($images as $image)
+                                <img src="{{ Storage::url($image) }}" alt="Post Image" class="rounded-lg object-cover w-full h-48">
+                            @endforeach
+                        </div>
+                        <div class="min-h-2 sm:min-h-4"></div>
+                    @endif
                     <div class="flex flex-row sm:items-center gap-2">
                         <flux:avatar :src="$post->user->avatar" size="xs" class="shrink-0" />
                         <div class="flex flex-col gap-0.5 sm:gap-2 sm:flex-row sm:items-center">

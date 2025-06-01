@@ -5,16 +5,20 @@ use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
 use Laravel\WorkOS\Http\Middleware\ValidateSessionWithWorkOS;
+use Livewire\WithFileUploads;
 
 use function Laravel\Folio\middleware;
 
 middleware(['auth', ValidateSessionWithWorkOS::class]);
 
 new class extends Component {
+    use WithFileUploads;
+
     public ?Collection $boards;
     public string $title = '';
     public string $description = '';
     public ?int $board = null;
+    public array $images = [];
 
     public function mount()
     {
@@ -27,12 +31,19 @@ new class extends Component {
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'board' => 'nullable|exists:boards,id',
+            'images.*' => 'nullable|image|max:1024', // 1MB Max
         ]);
+
+        $imagePaths = [];
+        foreach ($this->images as $image) {
+            $imagePaths[] = $image->store('post_images', 'public');
+        }
 
         Auth::user()->posts()->create([
             'board_id' => $this->board,
             'title' => $this->title,
             'description' => $this->description,
+            'image_paths' => $imagePaths,
         ]);
 
         $this->redirect('/');
@@ -61,6 +72,12 @@ new class extends Component {
                         </flux:radio>
                     @endforeach
                 </flux:radio.group>
+                <div>
+                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images (Max 4)')" />
+                    @error('images.*')
+                        <span class="text-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
                 <div class="flex justify-end">
                     <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
                 </div>
