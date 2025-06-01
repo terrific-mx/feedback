@@ -31,19 +31,20 @@ new class extends Component {
                     <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
                 </div>
             </div>
-            @if($plannedPosts->isNotEmpty())
-            <div class="min-h-4 sm:min-h-10"></div>
-            <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($plannedPosts as $post)
-                    @include('partials.post', ['post' => $post])
-                @endforeach
-            </div>
-            @endif
 
             @if($inProgressPosts->isNotEmpty())
             <div class="min-h-4 sm:min-h-10"></div>
             <div id="inProgressPosts" class="mx-auto max-w-lg max-sm:px-2">
                 @foreach ($inProgressPosts as $post)
+                    @include('partials.post', ['post' => $post])
+                @endforeach
+            </div>
+            @endif
+
+            @if($plannedPosts->isNotEmpty())
+            <div class="min-h-4 sm:min-h-10"></div>
+            <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
+                @foreach ($plannedPosts as $post)
                     @include('partials.post', ['post' => $post])
                 @endforeach
             </div>
