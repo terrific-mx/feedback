@@ -3,6 +3,7 @@
 use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Log;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -11,6 +12,7 @@ new class extends Component {
     public ?Board $currentBoard = null;
 
     public string $board_filter = 'all';
+    public string $sort = 'top';
 
     public function mount()
     {
@@ -22,6 +24,11 @@ new class extends Component {
     {
         $this->resetCurrentBoard();
         $this->validateBoardFilter();
+        $this->filterPosts();
+    }
+
+    public function updatedSort($sort)
+    {
         $this->filterPosts();
     }
 
@@ -45,9 +52,19 @@ new class extends Component {
 
     protected function filterPosts()
     {
-        $this->posts = $this->board_filter === 'all'
-            ? Post::latest()->get()
-            : Post::where('board_id', $this->board_filter)->latest()->get();
+        $query = Post::query();
+
+        if ($this->board_filter !== 'all') {
+            $query->where('board_id', $this->board_filter);
+        }
+
+        if ($this->sort === 'top') {
+            $query->withCount('votes')->orderByDesc('votes_count');
+        } else {
+            $query->latest();
+        }
+
+        $this->posts = $query->get();
     }
 }; ?>
 
@@ -80,6 +97,17 @@ new class extends Component {
                             @foreach ($boards as $board)
                             <flux:select.option :value="$board->id">{{ $board->name }}</flux:select.option>
                             @endforeach
+                        </flux:select>
+
+                        <flux:select wire:model.live="sort" variant="listbox" class="sm:max-w-fit">
+                            <x-slot name="trigger">
+                                <flux:select.button size="sm">
+                                    <flux:icon.arrows-up-down variant="micro" class="mr-2 text-zinc-400" />
+                                    <flux:select.selected />
+                                </flux:select.button>
+                            </x-slot>
+                            <flux:select.option value="top" selected>{{ __('Top') }}</flux:select.option>
+                            <flux:select.option value="newest">{{ __('Newest') }}</flux:select.option>
                         </flux:select>
                     </div>
 

@@ -1,4 +1,4 @@
-<div class="p-3 sm:p-4 rounded-lg relative hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
+<div wire:key="{{ $post->id }}" class="p-3 sm:p-4 rounded-lg relative hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
     <div>
         <flux:heading size="lg" variant="strong">{{ $post->title }}</flux:heading>
         <div class="min-h-2"></div>
@@ -21,7 +21,7 @@
             </div>
             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
-            <livewire:vote-button :$post />
+            <livewire:vote-button :$post :key="'vote-button-'.$post->id" />
             <flux:tooltip :content="__('Comments')" class="relative z-10">
                 <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
             </flux:tooltip>

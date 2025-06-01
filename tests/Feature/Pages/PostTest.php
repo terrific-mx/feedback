@@ -219,3 +219,33 @@ describe('board filter', function () {
             ->assertSee($post2->title);
     });
 });
+
+describe('sort', function () {
+    it('defaults to sorting by top posts', function () {
+        $post1 = Post::factory()->create();
+        $post2 = Post::factory()->create();
+        $post1->votes()->create(['user_id' => User::factory()->create()->id]);
+
+        Volt::test('pages.index')
+            ->assertSeeInOrder([$post1->title, $post2->title]);
+    });
+
+    it('sorts by newest posts', function () {
+        $post1 = Post::factory()->create();
+        $post2 = Post::factory()->create();
+
+        Volt::test('pages.index')
+            ->set('sort', 'newest')
+            ->assertSeeInOrder([$post2->title, $post1->title]);
+    });
+
+    it('sorts by top posts', function () {
+        $post1 = Post::factory()->create();
+        $post2 = Post::factory()->create();
+        $post2->votes()->create(['user_id' => User::factory()->create()->id]);
+
+        Volt::test('pages.index')
+            ->set('sort', 'top')
+            ->assertSeeInOrder([$post2->title, $post1->title]);
+    });
+});
