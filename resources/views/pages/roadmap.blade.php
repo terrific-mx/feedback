@@ -1,16 +1,19 @@
 <?php
 
-use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
 
 new class extends Component {
-    public ?Collection $posts = null;
+    public ?Collection $plannedPosts = null;
+    public ?Collection $inProgressPosts = null;
+    public ?Collection $completedPosts = null;
 
     public function mount()
     {
-        $this->posts = Post::roadmap()->latest()->get();
+        $this->plannedPosts = Post::planned()->latest('updated_at')->get();
+        $this->inProgressPosts = Post::inProgress()->latest('updated_at')->get();
+        $this->completedPosts = Post::completed()->latest('updated_at')->get();
     }
 }; ?>
 
@@ -28,12 +31,32 @@ new class extends Component {
                     <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
                 </div>
             </div>
+            @if($plannedPosts->isNotEmpty())
             <div class="min-h-4 sm:min-h-10"></div>
-            <div id="posts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($posts as $post)
+            <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
+                @foreach ($plannedPosts as $post)
                     @include('partials.post', ['post' => $post])
                 @endforeach
             </div>
+            @endif
+
+            @if($inProgressPosts->isNotEmpty())
+            <div class="min-h-4 sm:min-h-10"></div>
+            <div id="inProgressPosts" class="mx-auto max-w-lg max-sm:px-2">
+                @foreach ($inProgressPosts as $post)
+                    @include('partials.post', ['post' => $post])
+                @endforeach
+            </div>
+            @endif
+
+            @if($completedPosts->isNotEmpty())
+            <div class="min-h-4 sm:min-h-10"></div>
+            <div id="completedPosts" class="mx-auto max-w-lg max-sm:px-2">
+                @foreach ($completedPosts as $post)
+                    @include('partials.post', ['post' => $post])
+                @endforeach
+            </div>
+            @endif
         </div>
     @endvolt
 </x-layouts.board>

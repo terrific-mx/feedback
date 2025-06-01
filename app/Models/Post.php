@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -28,9 +29,21 @@ class Post extends Model
     }
 
     #[Scope]
-    protected function roadmap()
+    protected function planned(Builder $query)
     {
-        return $this->whereIn('status', ['planned', 'in progress', 'completed']);
+        $query->where('status', 'planned');
+    }
+
+    #[Scope]
+    protected function inProgress(Builder $query)
+    {
+        $query->where('status', 'in progress');
+    }
+
+    #[Scope]
+    protected function completed(Builder $query)
+    {
+        $query->where('status', 'completed');
     }
 
     protected function formattedStatus(): Attribute
