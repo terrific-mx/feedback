@@ -28,6 +28,16 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
+    public function hasVoted(User $user): bool
+    {
+        return $this->votes()->where('user_id', $user->id)->exists();
+    }
+
     #[Scope]
     protected function planned(Builder $query)
     {

@@ -64,6 +64,11 @@ class User extends Authenticatable
         return $this->hasMany(Post::class);
     }
 
+    public function votes()
+    {
+        return $this->hasMany(Vote::class);
+    }
+
     public function isAdmin()
     {
         return in_array($this->email, config('feedback.admin_emails', []));

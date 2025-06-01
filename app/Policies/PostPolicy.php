@@ -64,6 +64,11 @@ class PostPolicy
         return false;
     }
 
+    public function vote(User $user, Post $post): bool
+    {
+        return true;
+    }
+
     public function addComment(User $user, Post $post): bool
     {
         return true;
