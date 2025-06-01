@@ -80,9 +80,9 @@ class Post extends Model
     }
 
     #[Scope]
-    protected function byBoard(Builder $query, Board $board): void
+    protected function byBoard(Builder $query, string $boardId): void
     {
-        $query->where('board_id', $board->id);
+        $query->where('board_id', $boardId);
     }
 
     protected function formattedStatus(): Attribute

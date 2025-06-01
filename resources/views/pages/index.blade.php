@@ -54,8 +54,8 @@ new class extends Component {
     {
         $query = Post::query();
 
-        if ($this->currentBoard) {
-            $query->byBoard($this->currentBoard);
+        if ($this->board_filter !== 'all') {
+            $query->byBoard($this->board_filter);
         }
 
         match ($this->sort) {
