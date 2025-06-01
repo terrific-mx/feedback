@@ -73,13 +73,22 @@ new class extends Component {
                         </flux:radio>
                     @endforeach
                 </flux:radio.group>
-                <div>
+                <div x-data="{ isUploading: false, progress: 0 }"
+                    x-on:livewire-upload-start="isUploading = true"
+                    x-on:livewire-upload-finish="isUploading = false"
+                    x-on:livewire-upload-error="isUploading = false"
+                    x-on:livewire-upload-progress="progress = $event.detail.progress">
                     <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images')" :badge="__('Max 4')" />
+                    <div x-show="isUploading">
+                        <flux:text x-text="`{{ __('Uploading images:') }} ${progress}%`" class="mt-2"></flux:text>
+                    </div>
                 </div>
                 @if (count($images) > 0)
                 <div class="grid grid-cols-4 gap-4 mt-4">
                     @foreach ($images as $image)
-                    <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
+                        @if ($image->isPreviewable())
+                        <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
+                        @endif
                     @endforeach
                 </div>
                 @endif
