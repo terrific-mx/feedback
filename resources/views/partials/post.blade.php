@@ -21,12 +21,10 @@
             </div>
             <flux:text class="text-sm">{{ $post->created_at->diffForHumans() }}</flux:text>
             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
+            <livewire:vote-button :$post />
             <flux:tooltip :content="__('Comments')" class="relative z-10">
                 <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
             </flux:tooltip>
-        </div>
-        <div class="absolute right-3 top-3 sm:right-4 sm:top-4 z-20">
-            <livewire:vote-button :$post />
         </div>
         <a href="/posts/{{ $post->id }}" class="absolute inset-0"></a>
     </div>
