@@ -4,52 +4,20 @@ use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Computed;
 
 new class extends Component {
-    public ?Collection $posts = null;
-    public ?Collection $boards = null;
-    public ?Board $currentBoard = null;
-
     public string $board = 'all';
     public string $sort = 'top';
 
-    public function mount()
+    #[Computed]
+    public function boards(): Collection
     {
-        $this->loadBoards();
-        $this->applyFiltersAndSorting();
+        return Board::all();
     }
 
-    public function updatedBoard($board)
-    {
-        $this->resetCurrentBoard();
-        $this->validateBoardFilter();
-        $this->applyFiltersAndSorting();
-    }
-
-    public function updatedSort($sort)
-    {
-        $this->applyFiltersAndSorting();
-    }
-
-    protected function loadBoards()
-    {
-        $this->boards = Board::all();
-    }
-
-    protected function resetCurrentBoard()
-    {
-        $this->currentBoard = null;
-    }
-
-    protected function validateBoardFilter()
-    {
-        if ($this->board !== 'all') {
-            $this->validate(['board' => 'exists:boards,id']);
-            $this->currentBoard = $this->boards->firstWhere('id', $this->board);
-        }
-    }
-
-    protected function applyFiltersAndSorting()
+    #[Computed]
+    public function posts(): Collection
     {
         $query = Post::query();
 
@@ -63,7 +31,20 @@ new class extends Component {
             default => $query->latest(),
         };
 
-        $this->posts = $query->get();
+        return $query->get();
+    }
+
+    #[Computed]
+    public function currentBoard(): ?Board
+    {
+        return $this->board === 'all'
+            ? null
+            : $this->boards->firstWhere('id', $this->board);
+    }
+
+    public function updatedBoard($board)
+    {
+        $this->validate(['board' => 'exists:boards,id']);
     }
 }; ?>
 
@@ -74,13 +55,13 @@ new class extends Component {
                 <div class="max-w-7xl px-6 sm:px-8 py-3 mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
                     <div class="max-sm:hidden flex items-baseline gap-3">
                         <flux:heading size="lg" class="text-lg">
-                            @if ($currentBoard)
-                            {{ $currentBoard->name }}
+                            @if ($this->currentBoard)
+                            {{ $this->currentBoard->name }}
                             @else
                             {{ __('All feedback') }}
                             @endif
                         </flux:heading>
-                        <flux:text>{{ $posts->count() }}</flux:text>
+                        <flux:text>{{ $this->posts->count() }}</flux:text>
                     </div>
                     <flux:spacer />
 
@@ -93,7 +74,7 @@ new class extends Component {
                                 </flux:select.button>
                             </x-slot>
                             <flux:select.option value="all" selected>{{ __('All') }}</flux:select.option>
-                            @foreach ($boards as $board)
+                            @foreach ($this->boards as $board)
                             <flux:select.option :value="$board->id">{{ $board->name }}</flux:select.option>
                             @endforeach
                         </flux:select>
@@ -115,7 +96,7 @@ new class extends Component {
             </div>
             <div class="min-h-4 sm:min-h-10"></div>
             <div id="posts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($posts as $post)
+                @foreach ($this->posts as $post)
                     @include('partials.post', ['post' => $post])
                 @endforeach
             </div>
