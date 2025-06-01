@@ -12,7 +12,6 @@ new class extends Component {
     public Post $post;
     public ?Collection $comments = null;
     public ?Collection $boards = null;
-    public array $images = [];
 
     public string $description = '';
     public string $status = 'pending';
@@ -22,7 +21,6 @@ new class extends Component {
     {
         $this->comments = $this->post->comments()->oldest()->get();
         $this->boards = Board::all();
-        $this->images = $this->post->image_urls ?? [];
 
         $this->status = $this->post->status;
         $this->board = $this->post->board?->id;
@@ -91,12 +89,12 @@ new class extends Component {
                         <div class="min-h-2"></div>
                         <flux:text variant="strong">{{ $post->description }}</flux:text>
                     </div>
-                    @if (count($images) > 0)
+                    @if (count($post->image_urls) > 0)
                         <div class="min-h-2 sm:min-h-4"></div>
                         <div class="grid grid-cols-4 gap-4 mt-4">
-                            @foreach ($images as $image)
-                                <a href="{{ $image }}" target="_blank">
-                                    <img src="{{ $image }}" alt="{{ __('Image :index for :title', ['index' => $loop->index, 'title' => $post->title]) }}" class="rounded-lg object-cover w-full aspect-square">
+                            @foreach ($post->image_urls as $url)
+                                <a href="{{ $url }}" target="_blank">
+                                    <img src="{{ $url }}" alt="{{ __('Image :index for :title', ['index' => $loop->index, 'title' => $post->title]) }}" class="rounded-lg object-cover w-full aspect-square">
                                 </a>
                             @endforeach
                         </div>
