@@ -200,7 +200,7 @@ describe('board filter', function () {
         $post2 = Post::factory()->create(['title' => 'Post 2']);
 
         Volt::test('pages.index')
-            ->set('board_filter', $board->id)
+            ->set('board', $board->id)
             ->assertSee($post1->title)
             ->assertDontSee($post2->title);
     });
@@ -211,10 +211,10 @@ describe('board filter', function () {
         $post2 = Post::factory()->create(['title' => 'Post 2']);
 
         Volt::test('pages.index')
-            ->set('board_filter', $board->id)
+            ->set('board', $board->id)
             ->assertSee($post1->title)
             ->assertDontSee($post2->title)
-            ->set('board_filter', 'all')
+            ->set('board', 'all')
             ->assertSee($post1->title)
             ->assertSee($post2->title);
     });

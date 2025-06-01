@@ -3,7 +3,6 @@
 use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Log;
 use Livewire\Volt\Component;
 
 new class extends Component {
@@ -11,7 +10,7 @@ new class extends Component {
     public ?Collection $boards = null;
     public ?Board $currentBoard = null;
 
-    public string $board_filter = 'all';
+    public string $board = 'all';
     public string $sort = 'top';
 
     public function mount()
@@ -20,7 +19,7 @@ new class extends Component {
         $this->applyFiltersAndSorting();
     }
 
-    public function updatedBoardFilter($board)
+    public function updatedBoard($board)
     {
         $this->resetCurrentBoard();
         $this->validateBoardFilter();
@@ -44,9 +43,9 @@ new class extends Component {
 
     protected function validateBoardFilter()
     {
-        if ($this->board_filter !== 'all') {
-            $this->validate(['board_filter' => 'exists:boards,id']);
-            $this->currentBoard = $this->boards->firstWhere('id', $this->board_filter);
+        if ($this->board !== 'all') {
+            $this->validate(['board' => 'exists:boards,id']);
+            $this->currentBoard = $this->boards->firstWhere('id', $this->board);
         }
     }
 
@@ -54,8 +53,8 @@ new class extends Component {
     {
         $query = Post::query();
 
-        if ($this->board_filter !== 'all') {
-            $query->byBoard($this->board_filter);
+        if ($this->board !== 'all') {
+            $query->byBoard($this->currentBoard);
         }
 
         match ($this->sort) {
@@ -86,7 +85,7 @@ new class extends Component {
                     <flux:spacer />
 
                     <div class="flex items-center gap-2">
-                        <flux:select wire:model.live="board_filter" variant="listbox" class="sm:max-w-fit">
+                        <flux:select wire:model.live="board" variant="listbox" class="sm:max-w-fit">
                             <x-slot name="trigger">
                                 <flux:select.button size="sm">
                                     <flux:icon.funnel variant="micro" class="mr-2 text-zinc-400" />
