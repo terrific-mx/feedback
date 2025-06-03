@@ -65,24 +65,24 @@ new class extends Component {
     }
 }; ?>
 
-<x-layouts.board>
+<x-layouts.board :title="__('Share Your Feedback')">
     @volt('pages.posts.create')
         <div>
             <div id="secondary-header" class="sm:border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800">
                 <div class="max-w-7xl px-6 sm:px-8 py-3 mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
                     <div class="max-sm:hidden flex">
-                        <flux:heading size="lg" class="text-lg">{{ __('New post') }}</flux:heading>
+                        <flux:heading size="lg" class="text-lg">{{ __('Share Your Feedback') }}</flux:heading>
                     </div>
                 </div>
             </div>
             <div class="min-h-4 sm:min-h-10"></div>
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
-                <flux:input wire:model="title" :label="__('Title')" required />
-                <flux:textarea wire:model="description" :label="__('Description')" required />
-                <flux:radio.group wire:model="board" :label="__('Board')" variant="cards" class="grid grid-cols-2">
+                <flux:input wire:model="title" :label="__('Feedback Title')" required />
+                <flux:textarea wire:model="description" :label="__('Detailed Description')" required />
+                <flux:radio.group wire:model="board" :label="__('Select a Board')" variant="cards" class="grid grid-cols-2">
                     @foreach ($boards as $board)
                         <flux:radio :value="$board->id" class="items-center">
-                            <flux:badge :color="$board->color" variant="pill" inset="top bottom">{{ $board->name }}</flux:badge>
+                            <flux:badge :color="$board->color" size="sm" variant="pill" inset="top bottom">{{ $board->name }}</flux:badge>
                             <flux:radio.indicator />
                         </flux:radio>
                     @endforeach
@@ -92,7 +92,7 @@ new class extends Component {
                     x-on:livewire-upload-finish="isUploading = false"
                     x-on:livewire-upload-error="isUploading = false"
                     x-on:livewire-upload-progress="progress = $event.detail.progress">
-                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images')" :badge="__('Max 4')" :disabled="count($pendingImages) > 4" />
+                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Attach Images')" :description="__('You can upload up to 4 images.')"  :badge="__('Optional')" />
                     <div x-show="isUploading">
                         <flux:text x-text="`{{ __('Uploading images:') }} ${progress}%`" class="mt-2"></flux:text>
                     </div>
@@ -112,7 +112,7 @@ new class extends Component {
                 </div>
                 @endif
                 <div class="flex justify-end">
-                    <flux:button type="submit" variant="primary">{{ __('Create') }}</flux:button>
+                    <flux:button type="submit" variant="primary">{{ __('Submit Feedback') }}</flux:button>
                 </div>
             </form>
         </div>
