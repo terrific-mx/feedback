@@ -123,7 +123,7 @@ describe('create', function () {
         Storage::disk('public')->assertExists('post_images/' . $image2->hashName());
     });
 
-    it('validates images are of correct type and size', function () {
+    it('validates pending images are of correct type and size', function () {
         Storage::fake('public');
 
         $user = User::factory()->create();
@@ -131,12 +131,12 @@ describe('create', function () {
         $largeImage = UploadedFile::fake()->image('large.jpg')->size(2000);
 
         Volt::actingAs($user)->test('pages.posts.create')
-            ->set('images', [$invalidFile, $largeImage])
+            ->set('pendingImages', [$invalidFile, $largeImage])
             ->call('create')
-            ->assertHasErrors(['images.0' => 'image', 'images.1' => 'max']);
+            ->assertHasErrors(['pendingImages.0' => 'image', 'pendingImages.1' => 'max']);
     });
 
-    it('limits image uploads to 4', function () {
+    it('limits pending image uploads to 4', function () {
         Storage::fake('public');
 
         $user = User::factory()->create();
@@ -149,9 +149,41 @@ describe('create', function () {
         ];
 
         Volt::actingAs($user)->test('pages.posts.create')
-            ->set('images', $images)
+            ->set('pendingImages', $images)
             ->call('create')
-            ->assertHasErrors(['images' => 'max']);
+            ->assertHasErrors(['pendingImages' => 'max']);
+    });
+
+    it('limits image uploads to 4 in total initial plus pending', function () {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $images = [
+            UploadedFile::fake()->image('img1.jpg'),
+            UploadedFile::fake()->image('img2.jpg'),
+            UploadedFile::fake()->image('img3.jpg'),
+        ];
+
+        $component = Volt::actingAs($user)->test('pages.posts.create')
+            ->set('title', 'Test title with images')
+            ->set('description', 'Test description with images')
+            ->set('pendingImages', $images)
+            ->set('images', [UploadedFile::fake()->image('img4.jpg'), UploadedFile::fake()->image('img5.jpg')])
+            ->call('create');
+
+        expect(Post::first())->image_paths->toHaveCount(4);
+    });
+
+    it('validates images are of correct type and size', function () {
+        Storage::fake('public');
+
+        $user = User::factory()->create();
+        $invalidFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
+        $largeImage = UploadedFile::fake()->image('large.jpg')->size(2000);
+
+        Volt::actingAs($user)->test('pages.posts.create')
+            ->set('images', [$invalidFile, $largeImage])
+            ->assertHasErrors(['images.0' => 'image', 'images.1' => 'max']);
     });
 });
 

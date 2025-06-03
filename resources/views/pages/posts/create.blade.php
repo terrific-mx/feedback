@@ -18,11 +18,25 @@ new class extends Component {
     public string $title = '';
     public string $description = '';
     public ?int $board = null;
+    public array $pendingImages = [];
     public array $images = [];
 
     public function mount()
     {
         $this->boards = Board::all();
+    }
+
+    public function updatedImages(): void
+    {
+        $this->validate([
+            'images.*' => 'nullable|image|max:5120', // 5MB Max
+        ]);
+
+        $remainingSlots = 4 - count($this->pendingImages);
+        if ($remainingSlots > 0) {
+            $this->pendingImages = array_merge($this->pendingImages, array_slice($this->images, 0, $remainingSlots));
+        }
+        $this->reset('images');
     }
 
     public function create(): void
@@ -31,12 +45,12 @@ new class extends Component {
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'board' => 'nullable|exists:boards,id',
-            'images' => 'nullable|array|max:4',
-            'images.*' => 'nullable|image|max:1024', // 1MB Max
+            'pendingImages' => 'nullable|array|max:4',
+            'pendingImages.*' => 'nullable|image|max:5120', // 5MB Max
         ]);
 
         $imagePaths = [];
-        foreach ($this->images as $image) {
+        foreach ($this->pendingImages as $image) {
             $imagePaths[] = $image->store('post_images', 'public');
         }
 
@@ -83,9 +97,9 @@ new class extends Component {
                         <flux:text x-text="`{{ __('Uploading images:') }} ${progress}%`" class="mt-2"></flux:text>
                     </div>
                 </div>
-                @if (count($images) > 0)
+                @if (count($pendingImages) > 0)
                 <div class="grid grid-cols-4 gap-4 mt-4">
-                    @foreach ($images as $image)
+                    @foreach ($pendingImages as $image)
                         @if ($image->isPreviewable())
                         <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
                         @endif
