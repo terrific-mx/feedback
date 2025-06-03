@@ -78,7 +78,9 @@ new class extends Component {
             <div class="min-h-4 sm:min-h-10"></div>
             <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
                 <flux:input wire:model="title" :label="__('Feedback Title')" required />
+                <flux:separator variant="subtle" class="my-5" />
                 <flux:textarea wire:model="description" :label="__('Detailed Description')" required />
+                <flux:separator variant="subtle" class="my-5" />
                 <flux:radio.group wire:model="board" :label="__('Select a Board')" variant="cards" class="grid grid-cols-2">
                     @foreach ($boards as $board)
                         <flux:radio :value="$board->id" class="items-center">
@@ -87,6 +89,7 @@ new class extends Component {
                         </flux:radio>
                     @endforeach
                 </flux:radio.group>
+                <flux:separator variant="subtle" class="my-5" />
                 <div x-data="{ isUploading: false, progress: 0 }"
                     x-on:livewire-upload-start="isUploading = true"
                     x-on:livewire-upload-finish="isUploading = false"
@@ -98,7 +101,7 @@ new class extends Component {
                     </div>
                 </div>
                 @if (count($pendingImages) > 0)
-                <div class="grid grid-cols-4 gap-4 mt-4">
+                <div class="grid grid-cols-4 gap-4 mt-5">
                     @foreach ($pendingImages as $image)
                         @if ($image->isPreviewable())
                         <flux:card class="relative p-0!" wire:key="pending-image-{{ $loop->index }}">
@@ -112,6 +115,7 @@ new class extends Component {
                     @endforeach
                 </div>
                 @endif
+                <flux:separator variant="subtle" class="mt-6 mb-5" />
                 <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-x-4">
                     @if(url()->previous() !== url()->current())
                         <flux:button :href="url()->previous()">{{ __('Cancel') }}</flux:button>
