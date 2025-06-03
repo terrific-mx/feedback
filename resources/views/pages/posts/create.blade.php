@@ -92,7 +92,7 @@ new class extends Component {
                     x-on:livewire-upload-finish="isUploading = false"
                     x-on:livewire-upload-error="isUploading = false"
                     x-on:livewire-upload-progress="progress = $event.detail.progress">
-                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images')" :badge="__('Max 4')" />
+                    <flux:input type="file" wire:model="images" accept="image/*" multiple :label="__('Upload Images')" :badge="__('Max 4')" :disabled="count($pendingImages) > 4" />
                     <div x-show="isUploading">
                         <flux:text x-text="`{{ __('Uploading images:') }} ${progress}%`" class="mt-2"></flux:text>
                     </div>
@@ -101,7 +101,12 @@ new class extends Component {
                 <div class="grid grid-cols-4 gap-4 mt-4">
                     @foreach ($pendingImages as $image)
                         @if ($image->isPreviewable())
-                        <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
+                        <div class="relative" wire:key="pending-image-{{ $loop->index }}">
+                            <div  class="absolute top-0 right-0">
+                                <flux:button x-on:click="$wire.removeUpload('pendingImages', '{{ $image->getFilename() }}')" variant="primary" size="xs" icon="x-mark" />
+                            </div>
+                            <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
+                        </div>
                         @endif
                     @endforeach
                 </div>
