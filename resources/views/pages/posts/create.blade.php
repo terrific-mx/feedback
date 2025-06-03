@@ -101,18 +101,18 @@ new class extends Component {
                 <div class="grid grid-cols-4 gap-4 mt-4">
                     @foreach ($pendingImages as $image)
                         @if ($image->isPreviewable())
-                        <div class="relative" wire:key="pending-image-{{ $loop->index }}">
+                        <flux:card class="relative p-0!" wire:key="pending-image-{{ $loop->index }}">
                             <div  class="absolute -top-2 -right-2">
                                 <flux:button x-on:click="$wire.removeUpload('pendingImages', '{{ $image->getFilename() }}')" variant="primary" size="xs" icon="x-mark" />
                             </div>
-                            <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
-                        </div>
+                            <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-xl object-cover w-full aspect-square">
+                        </flux:card>
 
                         @endif
                     @endforeach
                 </div>
                 @endif
-                <div class="flex justify-end gap-x-4">
+                <div class="flex flex-col-reverse sm:flex-row justify-end gap-2 sm:gap-x-4">
                     @if(url()->previous() !== url()->current())
                         <flux:button :href="url()->previous()">{{ __('Cancel') }}</flux:button>
                     @endif
