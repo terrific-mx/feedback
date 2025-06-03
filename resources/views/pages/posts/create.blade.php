@@ -112,7 +112,10 @@ new class extends Component {
                     @endforeach
                 </div>
                 @endif
-                <div class="flex justify-end">
+                <div class="flex justify-end gap-x-4">
+                    @if(url()->previous() !== url()->current())
+                        <flux:button :href="url()->previous()">{{ __('Cancel') }}</flux:button>
+                    @endif
                     <flux:button type="submit" variant="primary">{{ __('Submit Feedback') }}</flux:button>
                 </div>
             </form>
