@@ -54,14 +54,14 @@ new class extends Component {
             $imagePaths[] = $image->store('post_images', 'public');
         }
 
-        Auth::user()->posts()->create([
+        $post = Auth::user()->posts()->create([
             'board_id' => $this->board,
             'title' => $this->title,
             'description' => $this->description,
             'image_paths' => $imagePaths,
         ]);
 
-        $this->redirect('/');
+        $this->redirect("/posts/{$post->id}");
     }
 }; ?>
 
@@ -102,11 +102,12 @@ new class extends Component {
                     @foreach ($pendingImages as $image)
                         @if ($image->isPreviewable())
                         <div class="relative" wire:key="pending-image-{{ $loop->index }}">
-                            <div  class="absolute top-0 right-0">
+                            <div  class="absolute -top-2 -right-2">
                                 <flux:button x-on:click="$wire.removeUpload('pendingImages', '{{ $image->getFilename() }}')" variant="primary" size="xs" icon="x-mark" />
                             </div>
                             <img src="{{ $image->temporaryUrl() }}" alt="{{ __('Image :index', ['index' => $loop->index]) }}" class="rounded-lg object-cover w-full aspect-square">
                         </div>
+
                         @endif
                     @endforeach
                 </div>
