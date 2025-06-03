@@ -128,7 +128,7 @@ describe('create', function () {
 
         $user = User::factory()->create();
         $invalidFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
-        $largeImage = UploadedFile::fake()->image('large.jpg')->size(2000);
+        $largeImage = UploadedFile::fake()->image('large.jpg')->size(6000);
 
         Volt::actingAs($user)->test('pages.posts.create')
             ->set('pendingImages', [$invalidFile, $largeImage])
@@ -179,7 +179,7 @@ describe('create', function () {
 
         $user = User::factory()->create();
         $invalidFile = UploadedFile::fake()->create('document.pdf', 100, 'application/pdf');
-        $largeImage = UploadedFile::fake()->image('large.jpg')->size(2000);
+        $largeImage = UploadedFile::fake()->image('large.jpg')->size(6000);
 
         Volt::actingAs($user)->test('pages.posts.create')
             ->set('images', [$invalidFile, $largeImage])

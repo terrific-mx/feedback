@@ -32,10 +32,10 @@ new class extends Component {
             'images.*' => 'nullable|image|max:5120', // 5MB Max
         ]);
 
-        $remainingSlots = 4 - count($this->pendingImages);
-        if ($remainingSlots > 0) {
-            $this->pendingImages = array_merge($this->pendingImages, array_slice($this->images, 0, $remainingSlots));
-        }
+        $newImages = collect($this->images)->take(4 - count($this->pendingImages));
+
+        $this->pendingImages = array_merge($this->pendingImages, $newImages->all());
+
         $this->reset('images');
     }
 
