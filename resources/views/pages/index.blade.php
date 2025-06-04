@@ -94,11 +94,15 @@ new class extends Component {
                     <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
                 </div>
             </div>
-            <div class="min-h-4 sm:min-h-10"></div>
-            <div id="posts" class="mx-auto max-w-7xl px-6 sm:px-8 grid gap-4">
-                @foreach ($this->posts as $post)
-                    @include('partials.post', ['post' => $post])
-                @endforeach
+
+            <div class="mx-auto max-w-7xl px-6 sm:px-8">
+                <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
+                    <div id="posts" class="grid gap-4">
+                        @foreach ($this->posts as $post)
+                            @include('partials.post', ['post' => $post])
+                        @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     @endvolt
