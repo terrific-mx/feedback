@@ -35,7 +35,7 @@ new class extends Component {
                     <div class="flex justify-between">
                         <div>
                             <flux:heading size="xl">{{ __('Roadmap') }}</flux:heading>
-                            <flux:text class="mt-1">{{ __('All posts and ideas from our community.') }}</flux:text>
+                            <flux:text class="mt-1">{{ __('Track the progress of your ideas and see what\'s coming next.') }}</flux:text>
                         </div>
                         <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
                     </div>
