@@ -32,7 +32,7 @@ new class extends Component {
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
             <div class="mx-auto max-w-2xl px-6 sm:px-8">
                 <div class="space-y-5">
-                    <div class="flex justify-between">
+                    <div class="max-sm:block max-sm:space-y-4 flex justify-between">
                         <div>
                             <flux:heading size="xl">{{ __('Roadmap') }}</flux:heading>
                             <flux:text class="mt-1">{{ __('Track the progress of your ideas and see what\'s coming next.') }}</flux:text>
@@ -40,7 +40,7 @@ new class extends Component {
                         <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
                     </div>
 
-                    <div class="flex">
+                    <div class="max-sm:block flex">
                         <flux:radio.group wire:model.live="filter" variant="segmented">
                             <flux:radio value="open" :label="__('Open')" />
                             <flux:radio value="closed" :label="__('Closed')" />
