@@ -95,7 +95,7 @@ new class extends Component {
                 </div>
             </div>
             <div class="min-h-4 sm:min-h-10"></div>
-            <div id="posts" class="mx-auto max-w-lg max-sm:px-2">
+            <div id="posts" class="mx-auto max-w-7xl px-6 sm:px-8 grid gap-4">
                 @foreach ($this->posts as $post)
                     @include('partials.post', ['post' => $post])
                 @endforeach
