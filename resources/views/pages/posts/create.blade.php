@@ -70,7 +70,7 @@ new class extends Component {
     @volt('pages.posts.create')
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
             <div class="mx-auto max-w-2xl px-6 sm:px-8">
-                <div id="secondary-header">
+                <div>
                     <flux:heading size="xl">{{ __('Share Your Feedback') }}</flux:heading>
                     <flux:separator variant="subtle" class="mt-4 max-sm:hidden" />
                 </div>

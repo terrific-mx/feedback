@@ -1,11 +1,11 @@
 <flux:card wire:key="{{ $post->id }}" size="sm" class="p-3 sm:p-4 relative hover:bg-zinc-50 dark:hover:bg-zinc-700/50">
     <div class="space-y-4">
-        <div class="flex justify-between">
+        <div class="flex justify-between flex-wrap gap-y-1flex-wrap gap-y-1">
             <flux:heading size="lg" variant="strong">{{ $post->title }}</flux:heading>
             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
         </div>
         <flux:text variant="strong" class="line-clamp-1">{{ $post->description }}</flux:text>
-        <div class="flex justify-between">
+        <div class="flex justify-between flex-wrap gap-y-1">
             <div class="flex gap-3 items-center">
                 @if ($post->user->isAdmin())
                 <flux:avatar :src="$post->user->avatar" size="sm" class="shrink-0" badge:circle badge:color="yellow">
