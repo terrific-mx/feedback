@@ -3,31 +3,27 @@
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Livewire\Volt\Component;
+use Livewire\Attributes\Computed;
 
 new class extends Component {
-    public ?Collection $plannedPosts = null;
-    public ?Collection $inProgressPosts = null;
-    public ?Collection $completedPosts = null;
     public string $filter = 'open';
 
-    public function mount()
+    #[Computed]
+    public function plannedPosts(): Collection
     {
-        $query = Post::query();
-
-        match ($this->filter) {
-            'open' => $query->open(),
-            'closed' => $query->closed(),
-            default => $query->open(),
-        };
-
-        $this->plannedPosts = (clone $query)->planned()->latest('updated_at')->get();
-        $this->inProgressPosts = (clone $query)->inProgress()->latest('updated_at')->get();
-        $this->completedPosts = (clone $query)->completed()->latest('updated_at')->get();
+        return Post::planned()->latest('updated_at')->get();
     }
 
-    public function updatedFilter($filter)
+    #[Computed]
+    public function inProgressPosts(): Collection
     {
-        $this->validate(['filter' => ['in:open,closed']]);
+        return Post::inProgress()->latest('updated_at')->get();
+    }
+
+    #[Computed]
+    public function completedPosts(): Collection
+    {
+        return Post::completed()->latest('updated_at')->get();
     }
 }; ?>
 
@@ -53,31 +49,33 @@ new class extends Component {
                 </flux:radio.group>
             </div>
 
-            @if($inProgressPosts->isNotEmpty())
-            <div class="min-h-4 sm:min-h-10"></div>
-            <div id="inProgressPosts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($inProgressPosts as $post)
-                    @include('partials.post', ['post' => $post])
-                @endforeach
-            </div>
-            @endif
+            @if($filter === 'open')
+                @if($this->inProgressPosts->isNotEmpty())
+                <div class="min-h-4 sm:min-h-10"></div>
+                <div id="inProgressPosts" class="mx-auto max-w-lg max-sm:px-2">
+                    @foreach ($this->inProgressPosts as $post)
+                        @include('partials.post', ['post' => $post])
+                    @endforeach
+                </div>
+                @endif
 
-            @if($plannedPosts->isNotEmpty())
-            <div class="min-h-4 sm:min-h-10"></div>
-            <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($plannedPosts as $post)
-                    @include('partials.post', ['post' => $post])
-                @endforeach
-            </div>
-            @endif
-
-            @if($completedPosts->isNotEmpty())
-            <div class="min-h-4 sm:min-h-10"></div>
-            <div id="completedPosts" class="mx-auto max-w-lg max-sm:px-2">
-                @foreach ($completedPosts as $post)
-                    @include('partials.post', ['post' => $post])
-                @endforeach
-            </div>
+                @if($this->plannedPosts->isNotEmpty())
+                <div class="min-h-4 sm:min-h-10"></div>
+                <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
+                    @foreach ($this->plannedPosts as $post)
+                        @include('partials.post', ['post' => $post])
+                    @endforeach
+                </div>
+                @endif
+            @else
+                @if($this->completedPosts->isNotEmpty())
+                <div class="min-h-4 sm:min-h-10"></div>
+                <div id="completedPosts" class="mx-auto max-w-lg max-sm:px-2">
+                    @foreach ($this->completedPosts as $post)
+                        @include('partials.post', ['post' => $post])
+                    @endforeach
+                </div>
+                @endif
             @endif
         </div>
     @endvolt
