@@ -15,11 +15,12 @@ new class extends Component {
     use WithFileUploads;
 
     public ?Collection $boards;
+    public array $images = [];
+
+    public ?int $board = null;
     public string $title = '';
     public string $description = '';
-    public ?int $board = null;
     public array $pendingImages = [];
-    public array $images = [];
 
     public function mount()
     {
@@ -67,16 +68,15 @@ new class extends Component {
 
 <x-layouts.board :title="__('Share Your Feedback')">
     @volt('pages.posts.create')
-        <div>
-            <div id="secondary-header" class="sm:border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800">
-                <div class="max-w-7xl px-6 sm:px-8 py-3 mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
-                    <div class="max-sm:hidden flex">
-                        <flux:heading size="lg" class="text-lg">{{ __('Share Your Feedback') }}</flux:heading>
-                    </div>
+        <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
+            <div id="secondary-header">
+                <div class="max-w-lg mx-auto">
+                    <flux:heading size="lg" class="text-lg">{{ __('Share Your Feedback') }}</flux:heading>
+                    <flux:separator variant="subtle" class="mt-4 max-sm:hidden" />
                 </div>
             </div>
-            <div class="min-h-4 sm:min-h-10"></div>
-            <form id="form" wire:submit="create" class="mx-auto max-w-lg max-sm:px-2 space-y-6">
+            <div class="min-h-8"></div>
+            <form id="form" wire:submit="create" class="mx-auto max-w-lg">
                 <flux:input wire:model="title" :label="__('Feedback Title')" required />
                 <flux:separator variant="subtle" class="my-5" />
                 <flux:textarea wire:model="description" :label="__('Detailed Description')" required />
