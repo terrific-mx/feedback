@@ -29,54 +29,54 @@ new class extends Component {
 
 <x-layouts.board>
     @volt('pages.roadmap')
-        <div>
-            <div id="secondary-header" class="sm:border-b border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800">
-                <div class="max-w-7xl px-6 sm:px-8 py-3 mx-auto flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-2">
-                    <div class="max-sm:hidden flex items-baseline gap-3">
-                        <flux:heading size="lg" class="text-lg">{{ __('Roadmap') }}</flux:heading>
+        <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
+            <div class="mx-auto max-w-7xl px-6 sm:px-8">
+                <div class="space-y-5">
+                    <div class="flex justify-between">
+                        <div>
+                            <flux:heading size="xl">{{ __('Roadmap') }}</flux:heading>
+                            <flux:text class="mt-1">{{ __('All posts and ideas from our community.') }}</flux:text>
+                        </div>
+                        <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
                     </div>
 
-                    <flux:spacer />
-
-                    <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
+                    <div class="flex">
+                        <flux:radio.group wire:model.live="filter" variant="segmented">
+                            <flux:radio value="open" :label="__('Open')" />
+                            <flux:radio value="closed" :label="__('Closed')" />
+                        </flux:radio.group>
+                    </div>
                 </div>
+
+                @if($filter === 'open')
+                    @if($this->inProgressPosts->isNotEmpty())
+                    <div class="min-h-4 sm:min-h-10"></div>
+                    <div id="inProgressPosts" class="grid gap-4">
+                        @foreach ($this->inProgressPosts as $post)
+                            @include('partials.post', ['post' => $post])
+                        @endforeach
+                    </div>
+                    @endif
+
+                    @if($this->plannedPosts->isNotEmpty())
+                    <div class="min-h-4 sm:min-h-10"></div>
+                    <div id="plannedPosts" class="grid gap-4">
+                        @foreach ($this->plannedPosts as $post)
+                            @include('partials.post', ['post' => $post])
+                        @endforeach
+                    </div>
+                    @endif
+                @else
+                    @if($this->completedPosts->isNotEmpty())
+                    <div class="min-h-4 sm:min-h-10"></div>
+                    <div id="completedPosts" class="grid gap-4">
+                        @foreach ($this->completedPosts as $post)
+                            @include('partials.post', ['post' => $post])
+                        @endforeach
+                    </div>
+                    @endif
+                @endif
             </div>
-
-            <div class="flex">
-                <flux:radio.group wire:model.live="filter" variant="segmented">
-                    <flux:radio value="open" :label="__('Open')" />
-                    <flux:radio value="closed" :label="__('Closed')" />
-                </flux:radio.group>
-            </div>
-
-            @if($filter === 'open')
-                @if($this->inProgressPosts->isNotEmpty())
-                <div class="min-h-4 sm:min-h-10"></div>
-                <div id="inProgressPosts" class="mx-auto max-w-lg max-sm:px-2">
-                    @foreach ($this->inProgressPosts as $post)
-                        @include('partials.post', ['post' => $post])
-                    @endforeach
-                </div>
-                @endif
-
-                @if($this->plannedPosts->isNotEmpty())
-                <div class="min-h-4 sm:min-h-10"></div>
-                <div id="plannedPosts" class="mx-auto max-w-lg max-sm:px-2">
-                    @foreach ($this->plannedPosts as $post)
-                        @include('partials.post', ['post' => $post])
-                    @endforeach
-                </div>
-                @endif
-            @else
-                @if($this->completedPosts->isNotEmpty())
-                <div class="min-h-4 sm:min-h-10"></div>
-                <div id="completedPosts" class="mx-auto max-w-lg max-sm:px-2">
-                    @foreach ($this->completedPosts as $post)
-                        @include('partials.post', ['post' => $post])
-                    @endforeach
-                </div>
-                @endif
-            @endif
         </div>
     @endvolt
 </x-layouts.board>
