@@ -82,6 +82,18 @@ class Post extends Model
     }
 
     #[Scope]
+    protected function open(Builder $query)
+    {
+        $query->whereIn('status', ['pending', 'reviewing', 'planned', 'in progress']);
+    }
+
+    #[Scope]
+    protected function closed(Builder $query)
+    {
+        $query->whereIn('status', ['completed', 'closed']);
+    }
+
+    #[Scope]
     protected function top(Builder $query): void
     {
         $query->withCount('votes')->orderByDesc('votes_count');

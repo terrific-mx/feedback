@@ -9,6 +9,7 @@ use Livewire\Attributes\Computed;
 new class extends Component {
     public string $board = 'all';
     public string $sort = 'top';
+    public string $filter = 'open';
 
     #[Computed]
     public function boards(): Collection
@@ -24,6 +25,12 @@ new class extends Component {
         if ($this->board !== 'all') {
             $query->byBoard($this->currentBoard);
         }
+
+        match ($this->filter) {
+            'open' => $query->open(),
+            'closed' => $query->closed(),
+            default => $query->open(),
+        };
 
         match ($this->sort) {
             'top' => $query->top(),
@@ -46,16 +53,29 @@ new class extends Component {
     {
         $this->validate(['board' => 'exists:boards,id']);
     }
+
+    public function updatedFilter($filter)
+    {
+        $this->validate(['filter' => ['in:open,closed']]);
+    }
 }; ?>
 
-<x-layouts.board>
+<x-layouts.board :title="__('Posts')">
     @volt('pages.index')
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
             <div class="mx-auto max-w-7xl px-6 sm:px-8">
-                <div class="flex justify-between">
-                    <flux:heading size="xl">{{ __('All posts') }}</flux:heading>
+                <div class="space-y-5">
+                    <div class="flex justify-between">
+                        <flux:heading size="xl">{{ __('All posts') }}</flux:heading>
+                        <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
+                    </div>
 
-                    <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
+                    <div class="flex">
+                        <flux:radio.group wire:model.live="filter" variant="segmented">
+                            <flux:radio value="open" :label="__('Open')" />
+                            <flux:radio value="closed" :label="__('Closed')" />
+                        </flux:radio.group>
+                    </div>
                 </div>
                 <div class="min-h-8"></div>
                 <div class="flex items-center gap-2 justify-end">
