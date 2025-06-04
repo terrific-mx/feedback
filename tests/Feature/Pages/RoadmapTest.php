@@ -18,15 +18,15 @@ it('only shows posts scoped by roadmap', function () {
         ['status' => 'planned'],
         ['status' => 'in progress'],
         ['status' => 'completed'],
-        ['status' => 'closed']
+        ['title' => 'Closed post', 'status' => 'closed'],
     )->create();
 
     get('/roadmap')
         ->assertOk()
         ->assertSee('Planned')
         ->assertSee('In Progress')
-        ->assertSee('Completed')
+        ->assertDontSee('Completed')
         ->assertDontSee('Pending')
         ->assertDontSee('Reviewing')
-        ->assertDontSee('Closed');
+        ->assertDontSee('Closed post');
 });
