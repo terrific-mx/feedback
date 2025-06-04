@@ -66,7 +66,10 @@ new class extends Component {
             <div class="mx-auto max-w-7xl px-6 sm:px-8">
                 <div class="space-y-5">
                     <div class="flex justify-between">
-                        <flux:heading size="xl">{{ __('All posts') }}</flux:heading>
+                        <div>
+                            <flux:heading size="xl">{{ __('All posts') }}</flux:heading>
+                            <flux:text class="mt-1">{{ __('All posts and ideas from our community.') }}</flux:text>
+                        </div>
                         <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
                     </div>
 
