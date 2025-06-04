@@ -4,7 +4,7 @@
             <flux:heading size="lg" variant="strong">{{ $post->title }}</flux:heading>
             <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
         </div>
-        <flux:text variant="strong" class="line-clamp-1">{{ $post->description }}{{ $post->description }}</flux:text>
+        <flux:text variant="strong" class="line-clamp-1">{{ $post->description }}</flux:text>
         <div class="flex justify-between">
             <div class="flex gap-3 items-center">
                 @if ($post->user->isAdmin())
