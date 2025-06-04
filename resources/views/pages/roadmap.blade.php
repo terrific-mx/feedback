@@ -8,12 +8,26 @@ new class extends Component {
     public ?Collection $plannedPosts = null;
     public ?Collection $inProgressPosts = null;
     public ?Collection $completedPosts = null;
+    public string $filter = 'open';
 
     public function mount()
     {
-        $this->plannedPosts = Post::planned()->latest('updated_at')->get();
-        $this->inProgressPosts = Post::inProgress()->latest('updated_at')->get();
-        $this->completedPosts = Post::completed()->latest('updated_at')->get();
+        $query = Post::query();
+
+        match ($this->filter) {
+            'open' => $query->open(),
+            'closed' => $query->closed(),
+            default => $query->open(),
+        };
+
+        $this->plannedPosts = (clone $query)->planned()->latest('updated_at')->get();
+        $this->inProgressPosts = (clone $query)->inProgress()->latest('updated_at')->get();
+        $this->completedPosts = (clone $query)->completed()->latest('updated_at')->get();
+    }
+
+    public function updatedFilter($filter)
+    {
+        $this->validate(['filter' => ['in:open,closed']]);
     }
 }; ?>
 
@@ -30,6 +44,13 @@ new class extends Component {
 
                     <flux:button href="/posts/create" icon="pencil-square" size="sm" variant="primary">{{ __('New post') }}</flux:button>
                 </div>
+            </div>
+
+            <div class="flex">
+                <flux:radio.group wire:model.live="filter" variant="segmented">
+                    <flux:radio value="open" :label="__('Open')" />
+                    <flux:radio value="closed" :label="__('Closed')" />
+                </flux:radio.group>
             </div>
 
             @if($inProgressPosts->isNotEmpty())
