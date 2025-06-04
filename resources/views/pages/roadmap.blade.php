@@ -27,7 +27,7 @@ new class extends Component {
     }
 }; ?>
 
-<x-layouts.board>
+<x-layouts.board :title="__('Roadmap')">
     @volt('pages.roadmap')
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
             <div class="mx-auto max-w-7xl px-6 sm:px-8">
