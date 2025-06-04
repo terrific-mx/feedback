@@ -2,6 +2,7 @@
     "Add a comment...": "Agregar un comentario...",
     "All": "Todo",
     "All feedback": "Todo el feedback",
+    "All posts": "Todas las publicaciones",
     "Amber": "Ámbar",
     "Appearance": "Apariencia",
     "Are you sure you want to delete your account?": "¿Estás seguro de que quieres eliminar tu cuenta?",
@@ -43,6 +44,7 @@
     "Purple": "Púrpura",
     "Red": "Rojo",
     "Reviewing": "Revisando",
+    "Roadmap": "Hoja de ruta",
     "Rose": "Rosa claro",
     "Save": "Guardar",
     "Saved.": "Guardado.",
@@ -56,6 +58,5 @@
     "Update your name and email address": "Actualiza tu nombre y dirección de correo electrónico",
     "Violet": "Violeta",
     "Yellow": "Amarillo",
-    "Zinc": "Zinc",
-    "Roadmap": "Hoja de ruta"
+    "Zinc": "Zinc"
 }
