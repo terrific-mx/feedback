@@ -30,7 +30,7 @@ new class extends Component {
 <x-layouts.board :title="__('Roadmap')">
     @volt('pages.roadmap')
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
-            <div class="mx-auto max-w-4xl px-6 sm:px-8">
+            <div class="mx-auto max-w-2xl px-6 sm:px-8">
                 <div class="space-y-5">
                     <div class="flex justify-between">
                         <div>
