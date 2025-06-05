@@ -33,7 +33,7 @@ class NotifyAdminsOfNewPost implements ShouldQueue
             $admin = User::where('email', $adminEmail)->first();
 
             if ($admin) {
-                $admin->notify((new PostCreated($this->post))->delay(now()->addMinutes(1)));
+                $admin->notify((new PostCreated($this->post)));
             }
         }
     }
