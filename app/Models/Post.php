@@ -53,9 +53,7 @@ class Post extends Model
     {
         $this->subscribers()
             ->where('user_id', '!=', $comment->user_id)
-            ->each(function ($user) use ($comment) {
-                $user->notify(new NewCommentNotification($this, $comment));
-            });
+            ->each(fn ($user) => $user->notify(new NewCommentNotification($this, $comment)));
     }
 
     public function hasVoted(User $user): bool

@@ -342,40 +342,24 @@ describe('sort', function () {
 });
 
 describe('subscriptions', function () {
-    it('allows authenticated users to subscribe to posts', function () {
+    it('allows authenticated users to toggle subscription status', function () {
         $post = Post::factory()->create();
         $user = User::factory()->create();
 
-        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
-            ->call('subscribe');
+        $component = Volt::actingAs($user)->test('pages.posts.show', ['post' => $post]);
 
+        $component->call('toggleSubscription');
         expect($post->subscribers->contains($user->id))->toBeTrue();
+
+        $component->call('toggleSubscription');
+        expect($post->fresh()->subscribers->contains($user->id))->toBeFalse();
     });
 
-    it('allows authenticated users to unsubscribe from posts', function () {
-        $post = Post::factory()->create();
-        $user = User::factory()->create();
-        $post->subscribers()->attach($user->id);
-
-        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
-            ->call('unsubscribe');
-
-        expect($post->subscribers->contains($user->id))->toBeFalse();
-    });
-
-    it('prevents unauthenticated users from subscribing', function () {
+    it('prevents unauthenticated users from toggling subscription status', function () {
         $post = Post::factory()->create();
 
         Volt::test('pages.posts.show', ['post' => $post])
-            ->call('subscribe')
-            ->assertForbidden();
-    });
-
-    it('prevents unauthenticated users from unsubscribing', function () {
-        $post = Post::factory()->create();
-
-        Volt::test('pages.posts.show', ['post' => $post])
-            ->call('unsubscribe')
+            ->call('toggleSubscription')
             ->assertForbidden();
     });
 

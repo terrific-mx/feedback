@@ -24,29 +24,26 @@ new class extends Component {
         $this->status = $this->post->status;
         $this->board = $this->post->board?->id;
 
-        $this->isSubscribed = Auth::check() && $this->post->subscribers()->where('user_id', Auth::id())->exists();
+        $this->isSubscribed = Auth::check()
+            && $this->post->subscribers()->where('user_id', Auth::id())->exists();
     }
 
-    public function subscribe()
+    public function toggleSubscription()
     {
         $this->authorize('subscribe', $this->post);
 
-        $this->post->subscribers()->attach(Auth::id());
-        $this->isSubscribed = true;
-    }
+        if ($this->isSubscribed) {
+            $this->post->subscribers()->detach(Auth::id());
+        } else {
+            $this->post->subscribers()->attach(Auth::id());
+        }
 
-    public function unsubscribe()
-    {
-        $this->authorize('unsubscribe', $this->post);
-
-        $this->post->subscribers()->detach(Auth::id());
-        $this->isSubscribed = false;
+        $this->isSubscribed = !$this->isSubscribed;
     }
 
     public function comment(): void
     {
         $this->authorize('addComment', $this->post);
-
         $this->validate([
             'description' => 'required|string',
         ]);
@@ -57,9 +54,7 @@ new class extends Component {
         ]);
 
         $this->post->notifySubscribers($comment);
-
         $this->reset('description');
-
         $this->comments = $this->post->comments()->oldest()->get();
     }
 
