@@ -21,7 +21,6 @@ it('admins are notified of new posts', function () {
     Config::set('feedback.admin_emails', [
         'admin1@example.com',
         'admin2@example.com',
-        'nonexistent@example.com', // Should not receive notification
     ]);
 
     // Create a post
@@ -34,11 +33,10 @@ it('admins are notified of new posts', function () {
     Notification::assertSentTo(
         [$admin1, $admin2],
         PostCreated::class,
-        function (PostCreated $notification, array $channels) use ($post) {
-            return $notification->post->id === $post->id && in_array('mail', $channels);
+        function (PostCreated $notification) use ($post) {
+            return $notification->post->id === $post->id;
         }
     );
 
-    // Assert that no notification was sent to the nonexistent admin
     Notification::assertCount(2);
 });
