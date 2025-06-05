@@ -107,7 +107,7 @@ new class extends Component {
                         <div class="space-y-4">
                             <div class="flex justify-between flex-wrap gap-y-1">
                                 <flux:heading size="lg" variant="strong">{{ $post->title }}</flux:heading>
-                                <div class="flex gap-2">
+                                <div class="flex items-center gap-2">
                                     @can('updateBoard', $post)
                                     <flux:dropdown>
                                         <flux:badge as="button" :color="$post->board?->color ?? 'zinc'" icon:trailing="chevron-down" size="sm">
