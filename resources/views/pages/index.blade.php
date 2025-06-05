@@ -70,7 +70,7 @@ new class extends Component {
                             <flux:heading size="xl">{{ __('All posts') }}</flux:heading>
                             <flux:text class="mt-1">{{ __('All posts and ideas from our community.') }}</flux:text>
                         </div>
-                        <flux:button href="/posts/create" icon="plus" variant="primary">{{ __('New post') }}</flux:button>
+                        <flux:button href="/posts/create" icon="plus" variant="primary" wire:navigate>{{ __('New post') }}</flux:button>
                     </div>
 
                     <div class="max-sm:block flex">

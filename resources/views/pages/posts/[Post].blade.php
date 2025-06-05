@@ -76,7 +76,14 @@ new class extends Component {
         <div class="max-sm:pt-8 max-sm:pb-16 pt-12 pb-24">
             <div class="mx-auto max-w-2xl px-6 sm:px-8">
                 <div class="space-y-4">
-                    <flux:button :href="url()->previous() !== url()->current() ? url()->previous() : '/'" icon="arrow-left" icon:variant="micro" size="sm" class="rounded-full!" square />
+                    <flux:button
+                        :href="url()->previous() !== url()->current() ? url()->previous() : '/'"
+                        icon="arrow-left"
+                        icon:variant="micro"
+                        size="sm"
+                        class="rounded-full!"
+                        square
+                        wire:navigate />
                     <flux:card class="p-3 sm:p-4">
                         <div class="space-y-4">
                             <div class="flex justify-between flex-wrap gap-y-1">

@@ -36,7 +36,7 @@ new class extends Component {
                         <flux:heading size="lg" class="text-lg">{{ __('Boards') }}</flux:heading>
                     </div>
                     <flux:spacer />
-                    <flux:button href="/boards/create" icon="pencil-square" size="sm" variant="primary">{{ __('New board') }}</flux:button>
+                    <flux:button href="/boards/create" icon="pencil-square" size="sm" variant="primary" wire:navigate>{{ __('New board') }}</flux:button>
                 </div>
             </div>
             <div class="min-h-4 sm:min-h-10"></div>

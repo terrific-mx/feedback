@@ -25,7 +25,7 @@
                     <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
                 </flux:tooltip>
             </div>
-            <a href="/posts/{{ $post->id }}" class="absolute inset-0"></a>
+            <a href="/posts/{{ $post->id }}" class="absolute inset-0" wire:navigate></a>
         </div>
     </div>
 </flux:card>

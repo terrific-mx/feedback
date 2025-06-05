@@ -7,7 +7,7 @@
         <flux:header container class="border-b border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 flex items-center">
             <flux:sidebar.toggle class="lg:hidden" icon="bars-2" inset="left" />
 
-            <flux:brand href="/" :name="config('app.name')" class="max-lg:hidden">
+            <flux:brand href="/" :name="config('app.name')" class="max-lg:hidden" wire:navigate>
                 <div class="flex aspect-square items-center justify-center rounded-md bg-accent text-accent-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal">
                         <path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"/>
@@ -18,8 +18,8 @@
             </flux:brand>
 
             <flux:navbar class="-mb-px max-lg:hidden">
-                <flux:navbar.item href="/">{{ __('Home') }}</flux:navbar.item>
-                <flux:navbar.item href="/roadmap">{{ __('Roadmap') }}</flux:navbar.item>
+                <flux:navbar.item href="/" wire:navigate>{{ __('Posts') }}</flux:navbar.item>
+                <flux:navbar.item href="/roadmap" wire:navigate>{{ __('Roadmap') }}</flux:navbar.item>
             </flux:navbar>
 
             <flux:spacer />
@@ -84,7 +84,7 @@
         <flux:sidebar stashable sticky class="lg:hidden border-r border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
 
-            <flux:brand :name="config('app.name')" href="/" class="px-2">
+            <flux:brand :name="config('app.name')" href="/" class="px-2" wire:navigate>
                 <div class="flex aspect-square items-center justify-center rounded-md bg-accent text-accent-foreground">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="size-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-mic-vocal">
                         <path d="m11 7.601-5.994 8.19a1 1 0 0 0 .1 1.298l.817.818a1 1 0 0 0 1.314.087L15.09 12"/>
@@ -96,8 +96,8 @@
 
             <flux:navlist variant="outline">
                 <flux:navlist.group>
-                    <flux:navlist.item href="/">{{ __('Home') }}</flux:navlist.item>
-                    <flux:navlist.item href="/roadmap">{{ __('Roadmap') }}</flux:navlist.item>
+                    <flux:navlist.item href="/" wire:navigate>{{ __('Posts') }}</flux:navlist.item>
+                    <flux:navlist.item href="/roadmap" wire:navigate>{{ __('Roadmap') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 
