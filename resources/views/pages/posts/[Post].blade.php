@@ -143,7 +143,7 @@ new class extends Component {
                                     @auth
                                         <flux:tooltip :content="$isSubscribed ? __('Unsubscribe from notifications') : __('Subscribe to notifications')">
                                             <flux:button
-                                                wire:click="{{ $isSubscribed ? 'unsubscribe' : 'subscribe' }}"
+                                                wire:click="toggleSubscription"
                                                 size="xs"
                                                 :icon="$isSubscribed ? 'bell' : 'bell-slash'"
                                                 :variant="$isSubscribed ? 'filled' : 'ghost'"
