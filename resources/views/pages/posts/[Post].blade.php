@@ -4,9 +4,7 @@ use App\Models\Board;
 use App\Models\Post;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Validate;
 use Livewire\Volt\Component;
-use Illuminate\Support\Facades\Storage;
 
 new class extends Component {
     public Post $post;
