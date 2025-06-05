@@ -14,7 +14,7 @@ Terrific Feedback helps founders avoid wasting engineering resources by:
 ### 🗂️ Capture Everything in One Place
 Stop digging through multiple sources. Our feedback hub organizes all customer insights in a single dashboard.
 
-[//]: # (Add screenshot: feedback-collection-ui.png)
+![Boards](https://github.com/user-attachments/assets/40348087-761f-4064-acf4-2c10d4b6dd32)
 
 ### ⭐ Prioritize What Matters
 - User voting system to surface popular requests
