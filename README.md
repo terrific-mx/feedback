@@ -1,27 +1,63 @@
-# Terrific Feedback
+# 🚀 Terrific Feedback
+**Stop building the wrong things.** Centralize customer feedback and prioritize features that actually matter.
 
-A Laravel-based feedback management system that allows users to submit, track, and manage product/service improvement ideas.
+[//]: # (Add hero screenshot here: app-dashboard.png)
 
-## Installation
+## Tired of Feedback Chaos?
+Terrific Feedback helps founders avoid wasting engineering resources by:
+- 📥 **Centralizing scattered feedback** from Slack, emails, and support tickets
+- 🚫 Preventing critical bugs from getting lost in endless threads
+- ⏳ Stopping time drains on low-priority feature requests
+- 📉 Reducing user churn through active listening
+- 📢 Ending "silent shipping" of unreported features
 
-1. Clone the repository
-2. Run `composer install`
-3. Copy `.env.example` to `.env` and configure your database
-4. Run `php artisan key:generate`
-5. Run migrations with `php artisan migrate`
+## How Terrific Feedback Solves This
+### 🗂️ Capture Everything in One Place
+Stop digging through multiple sources. Our feedback hub organizes all customer insights in a single dashboard.
 
-**Note:** This project requires Livewire Flux PRO components which require a paid license.
+[//]: # (Add screenshot: feedback-collection-ui.png)
 
-**Authentication:** This project uses [WorkOS](https://workos.com/) for authentication. For configuration details, refer to the [Laravel documentation](https://laravel.com/docs/12.x/starter-kits#workos).
+### ⭐ Prioritize What Matters
+- User voting system to surface popular requests
+- Discussion threads for idea validation
+- Data-driven insights to identify feature trends
 
-## Features
+[//]: # (Add screenshot: voting-system.png)
 
-Current features:
-- User feedback post creation
-- Listing all received feedback
-- Commenting on feedback submissions
+### 🗺️ Public Roadmaps
+- Automatically share development progress
+- Reduce "when will this ship?" inquiries
+- Build trust through transparency
 
-Planned features:
-- Feedback categorization
-- Voting system
-- Admin moderation tools
+[//]: # (Add screenshot: public-roadmap.png)
+
+### 🔁 Close the Feedback Loop
+- Automatic user notifications when features ship
+- Demonstrate active development of requests
+- Build loyalty through continuous engagement
+
+[//]: # (Add screenshot: notification-example.png)
+
+## Get Started
+```bash
+# Clone repository
+git clone https://github.com/terrific-mx/feedback.git
+
+# Install dependencies
+composer install
+
+# Configure environment
+cp .env.example .env
+php artisan key:generate
+
+# Run migrations
+php artisan migrate
+```
+
+> **Requirements**
+> - Livewire Flux PRO license (paid)
+> - WorkOS for authentication (configuration docs)
+
+---
+
+**Build what users actually want** - because great products emerge when you listen to your customers.
