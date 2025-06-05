@@ -40,9 +40,5 @@ it('admins are notified of new posts', function () {
     );
 
     // Assert that no notification was sent to the nonexistent admin
-    $nonExistentAdmin = User::where('email', 'nonexistent@example.com')->first();
-    Notification::assertNotSentTo(
-        $nonExistentAdmin,
-        PostCreated::class
-    );
+    Notification::assertCount(2);
 });
