@@ -58,8 +58,8 @@ composer run dev
 ```
 
 > **Requirements**
-> - Livewire Flux PRO license (paid)
-> - WorkOS for authentication (configuration docs)
+> - [Flux PRO](https://fluxui.dev) license
+> - [WorkOS](https://workos.com) for authentication ([configuration docs](https://laravel.com/docs/12.x/starter-kits#workos))
 
 ---
 
