@@ -21,7 +21,7 @@ class PostPolicy
      */
     public function view(User $user, Post $post): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -82,5 +82,15 @@ class PostPolicy
     public function updateBoard(User $user, Post $post): bool
     {
         return $user->isAdmin();
+    }
+
+    public function subscribe(User $user, Post $post)
+    {
+        return $this->view($user, $post);
+    }
+
+    public function unsubscribe(User $user, Post $post)
+    {
+        return $this->view($user, $post);
     }
 }

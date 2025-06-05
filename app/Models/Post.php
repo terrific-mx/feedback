@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\NewCommentNotification;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -41,6 +42,20 @@ class Post extends Model
     public function votes(): HasMany
     {
         return $this->hasMany(Vote::class);
+    }
+
+    public function subscribers()
+    {
+        return $this->belongsToMany(User::class, 'subscriptions');
+    }
+
+    public function notifySubscribers(Comment $comment)
+    {
+        $this->subscribers()
+            ->where('user_id', '!=', $comment->user_id)
+            ->each(function ($user) use ($comment) {
+                $user->notify(new NewCommentNotification($this, $comment));
+            });
     }
 
     public function hasVoted(User $user): bool

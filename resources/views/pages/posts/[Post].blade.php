@@ -12,6 +12,7 @@ new class extends Component {
     public Post $post;
     public ?Collection $comments = null;
     public ?Collection $boards = null;
+    public bool $isSubscribed = false;
 
     public string $description = '';
     public string $status = 'pending';
@@ -24,6 +25,24 @@ new class extends Component {
 
         $this->status = $this->post->status;
         $this->board = $this->post->board?->id;
+
+        $this->isSubscribed = Auth::check() && $this->post->subscribers()->where('user_id', Auth::id())->exists();
+    }
+
+    public function subscribe()
+    {
+        $this->authorize('subscribe', $this->post);
+
+        $this->post->subscribers()->attach(Auth::id());
+        $this->isSubscribed = true;
+    }
+
+    public function unsubscribe()
+    {
+        $this->authorize('unsubscribe', $this->post);
+
+        $this->post->subscribers()->detach(Auth::id());
+        $this->isSubscribed = false;
     }
 
     public function comment(): void
@@ -34,10 +53,12 @@ new class extends Component {
             'description' => 'required|string',
         ]);
 
-        $this->post->comments()->create([
+        $comment = $this->post->comments()->create([
             'description' => $this->description,
             'user_id' => Auth::id(),
         ]);
+
+        $this->post->notifySubscribers($comment);
 
         $this->reset('description');
 

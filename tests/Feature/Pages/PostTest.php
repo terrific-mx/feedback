@@ -3,10 +3,12 @@
 use App\Models\Board;
 use App\Models\Post;
 use App\Models\User;
+use App\Notifications\NewCommentNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Notification;
 
 use function Pest\Laravel\get;
 
@@ -336,5 +338,81 @@ describe('sort', function () {
         Volt::test('pages.index')
             ->set('sort', 'top')
             ->assertSeeInOrder([$post2->title, $post1->title]);
+    });
+});
+
+describe('subscriptions', function () {
+    it('allows authenticated users to subscribe to posts', function () {
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+
+        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
+            ->call('subscribe');
+
+        expect($post->subscribers->contains($user->id))->toBeTrue();
+    });
+
+    it('allows authenticated users to unsubscribe from posts', function () {
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+        $post->subscribers()->attach($user->id);
+
+        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
+            ->call('unsubscribe');
+
+        expect($post->subscribers->contains($user->id))->toBeFalse();
+    });
+
+    it('prevents unauthenticated users from subscribing', function () {
+        $post = Post::factory()->create();
+
+        Volt::test('pages.posts.show', ['post' => $post])
+            ->call('subscribe')
+            ->assertForbidden();
+    });
+
+    it('prevents unauthenticated users from unsubscribing', function () {
+        $post = Post::factory()->create();
+
+        Volt::test('pages.posts.show', ['post' => $post])
+            ->call('unsubscribe')
+            ->assertForbidden();
+    });
+
+    it('sends notifications to subscribers when new comments are added', function () {
+        Notification::fake();
+
+        $post = Post::factory()->create();
+        $subscriber = User::factory()->create();
+        $commenter = User::factory()->create();
+
+        $post->subscribers()->attach($subscriber->id);
+
+        Volt::actingAs($commenter)->test('pages.posts.show', ['post' => $post])
+            ->set('description', 'Test comment')
+            ->call('comment');
+
+        Notification::assertSentTo(
+            $subscriber,
+            NewCommentNotification::class
+        );
+    });
+
+    it('does not notify commenter about their own comments', function () {
+        Notification::fake();
+
+        $post = Post::factory()->create();
+        $user = User::factory()->create();
+
+        $post->subscribers()->attach($user->id);
+
+        Volt::actingAs($user)->test('pages.posts.show', ['post' => $post])
+            ->set('description', 'My own comment')
+            ->call('comment');
+
+        Notification::assertNotSentTo(
+            $user,
+            NewCommentNotification::class
+        );
     });
 });
