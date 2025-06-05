@@ -28,7 +28,7 @@ Stop digging through multiple sources. Our feedback hub organizes all customer i
 - Reduce "when will this ship?" inquiries
 - Build trust through transparency
 
-[//]: # (Add screenshot: public-roadmap.png)
+![Public Roadmap](https://github.com/user-attachments/assets/381ee401-16e8-48ee-b7c1-8693f99824f7)
 
 ### 🔁 Close the Feedback Loop
 - Automatic user notifications when features ship
