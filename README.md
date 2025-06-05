@@ -52,6 +52,9 @@ php artisan key:generate
 
 # Run migrations
 php artisan migrate
+
+# Start development server
+composer run dev
 ```
 
 > **Requirements**
