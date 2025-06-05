@@ -1,7 +1,7 @@
 # 🚀 Terrific Feedback
 **Stop building the wrong things.** Centralize customer feedback and prioritize features that actually matter.
 
-![Dashboard](https://github.com/user-attachments/assets/63f34fa4-de09-4cce-abb8-c41fe4f6f448)
+![Dashboard](https://github.com/user-attachments/assets/04f893fa-52f4-461b-866d-4be578cad29c)
 ## Tired of Feedback Chaos?
 Terrific Feedback helps founders avoid wasting engineering resources by:
 - 📥 **Centralizing scattered feedback** from Slack, emails, and support tickets
