@@ -60,11 +60,9 @@ class Post extends Model
 
     public function notifySubscribersAboutStatusChange($oldStatus, $newStatus)
     {
-        $subscribers = $this->subscribers()->where('user_id', '!=', Auth::id())->get();
-
-        foreach ($subscribers as $user) {
-            $user->notify(new PostStatusChanged($this, $oldStatus, $newStatus));
-        }
+        $this->subscribers()
+            ->where('user_id', '!=', Auth::id())
+            ->each(fn ($user) => $user->notify(new PostStatusChanged($this, $oldStatus, $newStatus)));
     }
 
     public function hasVoted(User $user): bool
