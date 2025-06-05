@@ -66,7 +66,12 @@ new class extends Component {
             'status' => 'required|in:pending,reviewing,planned,in progress,completed,closed',
         ]);
 
+        $oldFormattedStatus = $this->post->formatted_status;
         $this->post->update(['status' => $this->status]);
+
+        $this->post->notifySubscribersAboutStatusChange(
+            $oldFormattedStatus, $this->post->formatted_status
+        );
 
         $this->post->refresh();
     }

@@ -4,6 +4,7 @@ use App\Models\Board;
 use App\Models\Post;
 use App\Models\User;
 use App\Notifications\NewCommentNotification;
+use App\Notifications\PostStatusChanged;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Volt\Volt;
 use Illuminate\Http\UploadedFile;
@@ -272,6 +273,44 @@ describe('show', function () {
             ->set('board', 999)
             ->call('changeBoard')
             ->assertHasErrors(['board' => 'exists']);
+    });
+
+    it('sends notifications to subscribers when status changes', function () {
+        Notification::fake();
+
+        $post = Post::factory()->pending()->create();
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+        $subscriber = User::factory()->create();
+
+        $post->subscribers()->attach($subscriber->id);
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('status', 'completed')
+            ->call('changeStatus');
+
+        Notification::assertSentTo(
+            $subscriber,
+            PostStatusChanged::class,
+            fn ($notification) =>
+                $notification->post->id === $post->id &&
+                $notification->oldStatus === 'Pending' &&
+                $notification->newStatus === 'Completed'
+        );
+    });
+
+    it('does not notify the user who changed the status', function () {
+        Notification::fake();
+
+        $post = Post::factory()->pending()->create();
+        $adminUser = User::factory()->create(['email' => config('feedback.admin_emails')[0]]);
+
+        $post->subscribers()->attach($adminUser->id);
+
+        Volt::actingAs($adminUser)->test('pages.posts.show', ['post' => $post])
+            ->set('status', 'completed')
+            ->call('changeStatus');
+
+        Notification::assertNotSentTo($adminUser, PostStatusChanged::class);
     });
 });
 
