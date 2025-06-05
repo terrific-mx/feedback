@@ -178,6 +178,17 @@ new class extends Component {
                                     <flux:tooltip :content="__('Comments')">
                                         <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
                                     </flux:tooltip>
+                                    @auth
+                                        <flux:tooltip :content="$isSubscribed ? __('Unsubscribe from notifications') : __('Subscribe to notifications')">
+                                            <flux:button
+                                                wire:click="{{ $isSubscribed ? 'unsubscribe' : 'subscribe' }}"
+                                                size="xs"
+                                                :icon="$isSubscribed ? 'bell' : 'bell-slash'"
+                                                :variant="$isSubscribed ? 'filled' : 'ghost'"
+                                                square
+                                            />
+                                        </flux:tooltip>
+                                    @endauth
                                 </div>
                             </div>
                             <form wire:submit="comment" class="space-y-4">

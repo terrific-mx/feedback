@@ -410,9 +410,6 @@ describe('subscriptions', function () {
             ->set('description', 'My own comment')
             ->call('comment');
 
-        Notification::assertNotSentTo(
-            $user,
-            NewCommentNotification::class
-        );
+        Notification::assertNotSentTo($user,NewCommentNotification::class);
     });
 });
