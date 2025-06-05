@@ -6,6 +6,7 @@ use Livewire\Volt\Component;
 use Illuminate\Support\Facades\Auth;
 use Laravel\WorkOS\Http\Middleware\ValidateSessionWithWorkOS;
 use Livewire\WithFileUploads;
+use App\Jobs\NotifyAdminsOfNewPost;
 
 use function Laravel\Folio\middleware;
 
@@ -61,6 +62,8 @@ new class extends Component {
             'description' => $this->description,
             'image_paths' => $imagePaths,
         ]);
+
+        NotifyAdminsOfNewPost::dispatch($post);
 
         $this->redirect("/posts/{$post->id}");
     }
