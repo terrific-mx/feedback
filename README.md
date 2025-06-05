@@ -1,4 +1,4 @@
-# 🚀 Terrific Feedback
+# Terrific Feedback
 **Stop building the wrong things.** Centralize customer feedback and prioritize features that actually matter.
 
 ![Dashboard](https://github.com/user-attachments/assets/04f893fa-52f4-461b-866d-4be578cad29c)
