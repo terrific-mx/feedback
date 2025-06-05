@@ -147,6 +147,17 @@ new class extends Component {
                                     @else
                                     <flux:badge size="sm" :color="$post->status_color">{{ $post->formatted_status }}</flux:badge>
                                     @endcan
+                                    @auth
+                                        <flux:tooltip :content="$isSubscribed ? __('Unsubscribe from notifications') : __('Subscribe to notifications')">
+                                            <flux:button
+                                                wire:click="{{ $isSubscribed ? 'unsubscribe' : 'subscribe' }}"
+                                                size="xs"
+                                                :icon="$isSubscribed ? 'bell' : 'bell-slash'"
+                                                :variant="$isSubscribed ? 'filled' : 'ghost'"
+                                                square
+                                            />
+                                        </flux:tooltip>
+                                    @endauth
                                 </div>
                             </div>
                             <flux:text variant="strong" class="line-clamp-1">{{ $post->description }}</flux:text>
@@ -178,17 +189,6 @@ new class extends Component {
                                     <flux:tooltip :content="__('Comments')">
                                         <flux:badge size="sm" icon="chat-bubble-left-right" class="font-mono tabular-nums">{{ $post->comments->count() }}</flux:badge>
                                     </flux:tooltip>
-                                    @auth
-                                        <flux:tooltip :content="$isSubscribed ? __('Unsubscribe from notifications') : __('Subscribe to notifications')">
-                                            <flux:button
-                                                wire:click="{{ $isSubscribed ? 'unsubscribe' : 'subscribe' }}"
-                                                size="xs"
-                                                :icon="$isSubscribed ? 'bell' : 'bell-slash'"
-                                                :variant="$isSubscribed ? 'filled' : 'ghost'"
-                                                square
-                                            />
-                                        </flux:tooltip>
-                                    @endauth
                                 </div>
                             </div>
                             <form wire:submit="comment" class="space-y-4">
