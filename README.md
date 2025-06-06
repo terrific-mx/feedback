@@ -35,7 +35,7 @@ Stop digging through multiple sources. Our feedback hub organizes all customer i
 - Demonstrate active development of requests
 - Build loyalty through continuous engagement
 
-[//]: # (Add screenshot: notification-example.png)
+![Notifications](https://github.com/user-attachments/assets/830bb5ff-3768-4d5f-a076-4cc85a4c5e28)
 
 ## Get Started
 ```bash
