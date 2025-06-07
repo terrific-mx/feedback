@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  webhook:
+    name: Ping webhook
+    runs-on: ubuntu-latest
+    environment: Production
+    steps:
+      - name: Use curl to ping each webhook
+        env:
+          DEPLOY_WEBHOOK: ${{ secrets.DEPLOY_WEBHOOK }}
+        run: |
+          echo "$DEPLOY_WEBHOOK" | while read -r url; do
+            if [ -n "$url" ]; then
+              curl -n "$url"
+            fi
+          done
