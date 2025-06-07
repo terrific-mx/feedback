@@ -17,7 +17,8 @@ jobs:
           DEPLOY_WEBHOOK: ${{ secrets.DEPLOY_WEBHOOK }}
         run: |
           echo "$DEPLOY_WEBHOOK" | while read -r url; do
-            if [ -n "$url" ]; then
+            # Skip empty lines and comments
+            if [ -n "$url" ] && [ "${url:0:1}" != "#" ]; then
               curl -n "$url"
             fi
           done
