@@ -158,7 +158,7 @@ new class extends Component {
                                     @endauth
                                 </div>
                             </div>
-                            <flux:text variant="strong" class="line-clamp-1">{{ $post->description }}</flux:text>
+                            <flux:text variant="strong">{{ $post->description }}</flux:text>
                             @if (count($post->image_urls) > 0)
                                 <div class="grid grid-cols-4 gap-4 mt-4">
                                     @foreach ($post->image_urls as $url)
