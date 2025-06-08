@@ -198,7 +198,7 @@ new class extends Component {
                             @foreach ($comments as $comment)
                                 <flux:separator variant="subtle" />
                                 <div class="space-y-4">
-                                    <flux:text variant="strong">{{ $comment->description }}</flux:text>
+                                    <flux:text variant="strong">{!! $comment->description_with_line_breaks !!}</flux:text>
                                     <div class="flex justify-between">
                                         <div class="flex gap-3 items-center">
                                             @if ($comment->user->isAdmin())
