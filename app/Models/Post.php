@@ -165,4 +165,11 @@ class Post extends Model
                 ->toArray(),
         );
     }
+
+    protected function descriptionWithLineBreaks(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => nl2br(e($this->description)),
+        );
+    }
 }
